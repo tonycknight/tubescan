@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "paket": {
+      "version": "6.2.1",
+      "commands": [
+        "paket"
+      ]
+    },
+    "fake-cli": {
+      "version": "5.22.0",
+      "commands": [
+        "fake"
+      ]
+    },
+    "dotnet-reportgenerator-globaltool": {
+      "version": "5.0.4",
+      "commands": [
+        "reportgenerator"
+      ]
+    },
+    "dotnet-stryker": {
+      "version": "1.4.2",
+      "commands": [
+        "dotnet-stryker"
+      ]
+    }
+  }
+}
