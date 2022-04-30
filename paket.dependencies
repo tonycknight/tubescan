@@ -1,0 +1,18 @@
+source https://api.nuget.org/v3/index.json
+
+storage: none
+framework: net6.0, net5.0, netstandard2.0, netstandard2.1
+nuget coverlet.collector 3.1.2
+nuget coverlet.msbuild 3.1.2
+nuget crayon 2.0.64
+nuget Discord.Net 3.3.2
+nuget FluentAssertions
+nuget FsCheck.Xunit
+nuget McMaster.Extensions.CommandLineUtils 4.0.1
+nuget Microsoft.Extensions.DependencyInjection 6.0
+nuget Microsoft.Extensions.Http
+nuget Microsoft.NET.Test.Sdk 16.11.0
+nuget MongoDB.Driver
+nuget NSubstitute
+nuget xunit 2.4.1
+nuget xunit.runner.visualstudio 2.4.3

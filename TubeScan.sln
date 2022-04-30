@@ -3,7 +3,48 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32126.317
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TubeScan", "src\TubeScan\TubeScan.csproj", "{B54E952B-FB46-4B30-9854-5662D4C340E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TubeScan", "src\TubeScan\TubeScan.csproj", "{B54E952B-FB46-4B30-9854-5662D4C340E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{C74E29E9-157A-4142-B251-B736E99F49F0}"
+	ProjectSection(SolutionItems) = preProject
+		build.bat = build.bat
+		build.fsx = build.fsx
+		.github\workflows\build.yml = .github\workflows\build.yml
+		.github\workflows\clean-builds.yaml = .github\workflows\clean-builds.yaml
+		.github\CODEOWNERS = .github\CODEOWNERS
+		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
+		paket.dependencies = paket.dependencies
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8444DF6B-15DF-4C3D-B66A-ACE9C04F1DBA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{DFDF408C-9108-4DD7-B157-622E131F7BCB}"
+	ProjectSection(SolutionItems) = preProject
+		docs\bot_actions.md = docs\bot_actions.md
+		docs\bot_config.md = docs\bot_config.md
+		docs\discord_config.md = docs\discord_config.md
+		README.md = README.md
+		docs\tfl.md = docs\tfl.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{CB48D928-190C-4045-8666-D90E5FA29939}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TubeScan.Tests", "tests\TubeScan.Tests\TubeScan.Tests.csproj", "{E66CE49C-EE64-4835-841C-D7E49C057607}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{DC4276A5-C73D-4243-9CCC-1DBED01EFC14}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.debug.yml = docker-compose.debug.yml
+		docker-compose.yml = docker-compose.yml
+		Dockerfile = Dockerfile
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{B56076EC-D52E-4805-BF50-1BCE5B348035}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build.yml = .github\workflows\build.yml
+		.github\workflows\clean-builds.yaml = .github\workflows\clean-builds.yaml
+		.github\CODEOWNERS = .github\CODEOWNERS
+		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +56,19 @@ Global
 		{B54E952B-FB46-4B30-9854-5662D4C340E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B54E952B-FB46-4B30-9854-5662D4C340E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B54E952B-FB46-4B30-9854-5662D4C340E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E66CE49C-EE64-4835-841C-D7E49C057607}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E66CE49C-EE64-4835-841C-D7E49C057607}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E66CE49C-EE64-4835-841C-D7E49C057607}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E66CE49C-EE64-4835-841C-D7E49C057607}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B54E952B-FB46-4B30-9854-5662D4C340E8} = {8444DF6B-15DF-4C3D-B66A-ACE9C04F1DBA}
+		{E66CE49C-EE64-4835-841C-D7E49C057607} = {CB48D928-190C-4045-8666-D90E5FA29939}
+		{DC4276A5-C73D-4243-9CCC-1DBED01EFC14} = {C74E29E9-157A-4142-B251-B736E99F49F0}
+		{B56076EC-D52E-4805-BF50-1BCE5B348035} = {C74E29E9-157A-4142-B251-B736E99F49F0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {341E2423-731A-493D-A358-FBFBD33C9415}

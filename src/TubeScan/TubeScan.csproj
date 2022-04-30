@@ -1,10 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Authors>Tony Knight</Authors>
+    <Copyright>(c) Tony Knight 2022</Copyright>
+    <Description>A Discord bot for TfL info</Description>
   </PropertyGroup>
-
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;CS8619;CS8604;CS8620;CS8634;CS8600;CS8625;CS4014;CS8603;CS8618;CS8602</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;CS8619;CS8604;CS8620;CS8634;CS8600;CS8625;CS4014;CS8603;CS8618;CS8602</NoWarn>
+  </PropertyGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

@@ -1,0 +1,104 @@
+name: Build & Release
+
+
+on:
+  push:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  build-version-number: 0.2.${{ github.run_number }}  
+  docker-image-name: ghcr.io/tonycknight/tubescan:v0.2.${{ github.run_number }}
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v1.9.0
+        with:
+          dotnet-version: "6.0.x"
+        
+      - name: dotnet tool restore
+        run: dotnet tool restore
+              
+      - name: Run build
+        run: dotnet fake run "build.fsx" -t "All"
+
+      - name: Archive Test results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: tests.results
+          path: |
+            ./tests/**/TestResults/*
+            
+      - name: Archive Stryker results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: stryker.results
+          path: |
+            ./StrykerOutput/**
+
+      - name: Archive Code coverage
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: codecoverage
+          path: ./publish/codecoverage/*.*
+          
+      - name: Unit test results
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: unit test results
+          path: ${{ github.workspace }}/tests/TubeScan.Tests/TestResults/test_results.trx
+          reporter: dotnet-trx
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Code coverage results
+        uses: 5monkeys/cobertura-action@master
+        if: always()
+        with:
+          path: ${{ github.workspace }}/tests/TubeScan.Tests/TestResults/coverage.info
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          minimum_coverage: 70
+          fail_below_threshold: false
+          show_line: true
+          show_branch: true
+          show_missing: true
+          show_class_names: true
+          link_missing_lines: true
+          report_name: code coverage results
+
+  #codeql:
+  #  uses: ./.github/workflows/codeql-analysis.yml
+  #  needs:   [ build ]
+
+  build-docker-image:
+    runs-on: ubuntu-latest
+    needs:   [ build ]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build docker image
+        run: docker build -t ${{ env.docker-image-name }} --build-arg BuildVersion=${{ env.build-version-number }} .
+
+      - name: Login to GitHub Container Registry
+        #if: github.ref == 'refs/heads/main'
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GHCR }}
+
+      - name: Push docker image
+        #if: github.ref == 'refs/heads/main' 
+        run: docker push ${{ env.docker-image-name }}
+
