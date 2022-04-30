@@ -9,10 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{C74E29E9
 	ProjectSection(SolutionItems) = preProject
 		build.bat = build.bat
 		build.fsx = build.fsx
-		.github\workflows\build.yml = .github\workflows\build.yml
-		.github\workflows\clean-builds.yaml = .github\workflows\clean-builds.yaml
 		.github\CODEOWNERS = .github\CODEOWNERS
-		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
 		paket.dependencies = paket.dependencies
 	EndProjectSection
 EndProject
