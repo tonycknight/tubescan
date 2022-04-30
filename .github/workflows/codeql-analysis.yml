@@ -42,7 +42,8 @@ jobs:
         
     - name: dotnet tool restore
       run: dotnet tool restore
-              
+
+    # Disabled, as Fake throws an NRE on Build within 5 milliseconds of start. Autobuild used instead.
     #- name: Run build
     #  run: dotnet fake run "build.fsx" -t "Build"
 
