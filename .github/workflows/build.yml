@@ -76,9 +76,9 @@ jobs:
           link_missing_lines: true
           report_name: code coverage results
 
-  #codeql:
-  #  uses: ./.github/workflows/codeql-analysis.yml
-  #  needs:   [ build ]
+  codeql:
+    uses: ./.github/workflows/codeql-analysis.yml
+    needs:   [ build ]
 
   build-docker-image:
     runs-on: ubuntu-latest
