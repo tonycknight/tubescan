@@ -43,8 +43,12 @@ jobs:
     - name: dotnet tool restore
       run: dotnet tool restore
               
-    - name: Run build
-      run: dotnet fake run "build.fsx" -t "Build"
+    #- name: Run build
+    #  run: dotnet fake run "build.fsx" -t "Build"
+
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v2
+
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
