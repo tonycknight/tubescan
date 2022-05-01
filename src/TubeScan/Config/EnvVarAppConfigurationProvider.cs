@@ -1,4 +1,5 @@
-﻿
+﻿using Tk.Extensions;
+
 namespace TubeScan.Config
 {
     internal class EnvVarAppConfigurationProvider : IAppConfigurationProvider

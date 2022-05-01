@@ -1,4 +1,6 @@
-﻿using TubeScan.Lines;
+﻿using Tk.Extensions;
+using Tk.Extensions.Time;
+using TubeScan.Lines;
 using TubeScan.Models;
 using TubeScan.Tfl;
 

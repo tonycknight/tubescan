@@ -14,5 +14,6 @@ nuget Microsoft.Extensions.Http
 nuget Microsoft.NET.Test.Sdk 16.11.0
 nuget MongoDB.Driver
 nuget NSubstitute
+nuget Tk.Extensions
 nuget xunit 2.4.1
 nuget xunit.runner.visualstudio 2.4.3
