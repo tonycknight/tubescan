@@ -2,6 +2,7 @@
 using System.Reflection;
 using Discord.Commands;
 using Tk.Extensions;
+using Tk.Extensions.Reflection;
 using TubeScan.Telemetry;
 
 namespace TubeScan.DiscordCommands
