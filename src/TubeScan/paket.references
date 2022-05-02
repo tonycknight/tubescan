@@ -5,3 +5,4 @@ McMaster.Extensions.CommandLineUtils
 Microsoft.Extensions.DependencyInjection
 MongoDB.Driver
 Microsoft.Extensions.Http
+Tk.Extensions

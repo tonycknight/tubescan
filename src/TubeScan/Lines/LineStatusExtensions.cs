@@ -1,4 +1,5 @@
-﻿using TubeScan.Models;
+﻿using Tk.Extensions;
+using TubeScan.Models;
 
 namespace TubeScan.Lines
 {

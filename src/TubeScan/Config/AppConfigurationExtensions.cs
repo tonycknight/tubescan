@@ -1,4 +1,6 @@
-﻿namespace TubeScan.Config
+﻿using Tk.Extensions;
+
+namespace TubeScan.Config
 {
     internal static class AppConfigurationExtensions
     {

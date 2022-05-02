@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
+using Tk.Extensions.Tasks;
+using Tk.Extensions.Time;
 using TubeScan.Lines;
 using TubeScan.Stations;
 using TubeScan.Tfl;

@@ -1,4 +1,6 @@
-﻿namespace TubeScan.Models
+﻿using Tk.Extensions;
+
+namespace TubeScan.Models
 {
     internal class Station
     {

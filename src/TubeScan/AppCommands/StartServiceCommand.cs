@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using McMaster.Extensions.CommandLineUtils;
+using Tk.Extensions;
+using Tk.Extensions.Reflection;
 using TubeScan.Config;
 using TubeScan.DiscordClient;
 using TubeScan.Telemetry;
