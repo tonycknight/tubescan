@@ -18,6 +18,7 @@ namespace TubeScan.DiscordCommands
         }
 
         [Command("about", RunMode = RunMode.Async)]
+        [System.ComponentModel.Description("About this bot")]
         public Task ShowAboutAsync()
         {
             try
@@ -53,16 +54,9 @@ namespace TubeScan.DiscordCommands
         public Task ShowHelpAsync()
         {
             try
-            {
-                var cmds = new[] {
-                    ("start", "Start a private conversation with the bot."),
-                    ("lines", "Show line status"),
-                    ("station", "Get a station's status. Form: ``station <tag>``"),
-                    ("tags", "List all your tags"),
-                    ("tag", "Set a tag. Form: ``tag <tag name> <station name>``"),
-                    ("about", "About this bot"),
-                };
-
+            {                
+                var cmds = this.GetType().GetDiscordCommandTypes().GetCommandHelp().ToArray();
+                
                 var pad = cmds.Max(t => t.Item1.Length);
                 var msg = cmds.Select(t => $"``{t.Item1.PadRight(pad)}`` {t.Item2}").Join(Environment.NewLine);
 

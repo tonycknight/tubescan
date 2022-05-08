@@ -15,6 +15,7 @@ namespace TubeScan.DiscordCommands
         }
 
         [Command("start", RunMode = RunMode.Async)]
+        [System.ComponentModel.Description("Start a private conversation with the bot.")]
         public async Task StartConversationCommand()
         {
             try
