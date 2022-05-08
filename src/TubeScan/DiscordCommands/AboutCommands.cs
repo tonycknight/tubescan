@@ -55,11 +55,11 @@ namespace TubeScan.DiscordCommands
         {
             try
             {                
-                var cmds = this.GetType().GetDiscordCommandTypes().GetCommandHelp().ToArray();
+                var msg = this.GetType().GetDiscordCommandTypes()
+                                .GetCommandHelp()
+                                .FormatCommandHelp()
+                                .Join(Environment.NewLine);
                 
-                var pad = cmds.Max(t => t.Item1.Length);
-                var msg = cmds.Select(t => $"``{t.Item1.PadRight(pad)}`` {t.Item2}").Join(Environment.NewLine);
-
                 return ReplyAsync(msg);
             }
             catch (Exception ex)

@@ -22,5 +22,11 @@ namespace TubeScan.DiscordCommands
             return methods.Select(a => (a.cmdAttr.Text, a.descAttr?.Description))
                 .OrderBy(t => t.Text);
         }
+
+        public static IEnumerable<string> FormatCommandHelp(this IEnumerable<(string, string)> cmds)
+        {
+            var pad = cmds.Max(t => t.Item1.Length);
+            return cmds.Select(t => $"``{t.Item1.PadRight(pad)}`` {t.Item2}");
+        }
     }
 }
