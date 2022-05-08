@@ -11,6 +11,7 @@ namespace TubeScan.DiscordCommands
     internal class AboutCommands : ModuleBase<SocketCommandContext>
     {
         private readonly ITelemetry _telemetry;
+        private const string HelpCommand = "help";
 
         public AboutCommands(ITelemetry telemetry)
         {
@@ -32,7 +33,7 @@ namespace TubeScan.DiscordCommands
                 }
                 .Concat(ProgramBootstrap.GetVersionNotices(attrs))
                 .Concat(ProgramBootstrap.Get3rdPartyNotices())
-                .Concat(new[] { "", "For command help, just enter ``help``.", ""})
+                .Concat(new[] { "", $"For command help, just enter ``{HelpCommand}``.", ""})
                 .Where(x => x != null).Join(Environment.NewLine);
 
                 var eb = new Discord.EmbedBuilder()
@@ -50,7 +51,7 @@ namespace TubeScan.DiscordCommands
             }
         }
 
-        [Command("help", RunMode = RunMode.Async)]
+        [Command(HelpCommand, RunMode = RunMode.Async)]
         public Task ShowHelpAsync()
         {
             try
