@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Discord.Commands;
+using Tk.Extensions;
 using TubeScan.Telemetry;
 
 namespace TubeScan.DiscordCommands
@@ -15,22 +16,28 @@ namespace TubeScan.DiscordCommands
         }
 
         [Command("start", RunMode = RunMode.Async)]
+        [System.ComponentModel.Description("Start a private conversation with the bot.")]
         public async Task StartConversationCommand()
         {
             try
             {
                 var authorId = Context.GetAuthorId();
 
+                var helpMsg = this.GetType().GetDiscordCommandTypes()
+                            .GetCommandHelp()
+                            .FormatCommandHelp()
+                            .Join(Environment.NewLine);
+
                 if (!Context.IsDMChannel())
                 {
                     var replyChannel = await Context.Message.Author.CreateDMChannelAsync();
-                    await replyChannel.SendMessageAsync("Starting a new conversation...");
+                    await replyChannel.SendMessageAsync(helpMsg);
 
                     ReplyAsync($"Check your DMs {Context.GetAuthorMention()}");
                 }
                 else
-                {
-                    ReplyAsync("Starting a new conversation...");
+                {                    
+                    ReplyAsync(helpMsg);
                 }
             }
             catch (Exception ex)

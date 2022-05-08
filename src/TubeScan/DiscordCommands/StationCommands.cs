@@ -26,6 +26,7 @@ namespace TubeScan.DiscordCommands
         }
 
         [Command("tag", RunMode = RunMode.Async)]
+        [System.ComponentModel.Description("Set a station name tag. Form: ``tag <tag name> <station name>``.")]
         public async Task SetStationTagAsyncd(string tagName, [Remainder] string stationNameQuery)
         {
             try
@@ -55,6 +56,7 @@ namespace TubeScan.DiscordCommands
         }
 
         [Command("tags", RunMode = RunMode.Async)]
+        [System.ComponentModel.Description("List all your tags")]
         public async Task GetStationTagsAsync()
         {
             try
@@ -83,6 +85,7 @@ namespace TubeScan.DiscordCommands
 
         [Command("station", RunMode = RunMode.Async)]
         [Alias("stn")]
+        [System.ComponentModel.Description("Get a station's status. Form: ``station <tag>``.")]
         public async Task GetStationStatusAsync(string tag)
         {
             try
