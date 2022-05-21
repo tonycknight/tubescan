@@ -1,7 +1,9 @@
-﻿using TubeScan.Telemetry;
+﻿using System.Diagnostics.CodeAnalysis;
+using TubeScan.Telemetry;
 
 namespace TubeScan.Scheduling
 {
+    [ExcludeFromCodeCoverage]
     internal class JobScheduler : IJobScheduler, IDisposable
     {
         private readonly ITelemetry _telemetry;
