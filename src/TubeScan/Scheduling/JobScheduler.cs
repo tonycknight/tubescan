@@ -1,57 +1,22 @@
-﻿using Tk.Extensions.Time;
-using TubeScan.Telemetry;
+﻿using TubeScan.Telemetry;
 
 namespace TubeScan.Scheduling
 {
     internal class JobScheduler : IJobScheduler, IDisposable
     {
-        private readonly IList<JobScheduleInfo> _jobs = new List<JobScheduleInfo>();
-        private readonly System.Timers.Timer _timer;
-        private readonly ITimeProvider _time;
         private readonly ITelemetry _telemetry;
-        private readonly TimeSpan _cycleTime;
+        private readonly List<JobScheduleTimer> _jobs = new List<JobScheduleTimer>();
 
-        public JobScheduler(ITimeProvider time, ITelemetry telemetry)
+        public IEnumerable<JobScheduleInfo> Jobs => _jobs.Select(t => t.Info);
+
+        public JobScheduler(ITelemetry telemetry)
         {
-            _time = time;
             _telemetry = telemetry;
-            _cycleTime = TimeSpan.FromSeconds(1);
-            _timer = new System.Timers.Timer();
         }
 
-        ~JobScheduler() => Dispose(false);
-
-        public IEnumerable<JobScheduleInfo> Jobs => _jobs;
-
-        public bool Started => _timer.Enabled;
-
-        public IJobScheduler Register(IEnumerable<JobScheduleInfo> infos)
+        ~JobScheduler()
         {
-            foreach (var info in infos)
-            {
-                _jobs.Add(info);
-            }
-
-            return this;
-        }
-
-        public void Start()
-        {
-            if (_jobs.Count >= 1)
-            {                
-                _timer.Interval = _cycleTime.TotalMilliseconds;
-                _timer.Elapsed += timer_Elapsed;
-                _timer.AutoReset = true;
-                _timer.Enabled = true;
-                _timer.Start();
-            }
-        }
-
-
-        public void Stop()
-        {
-            _timer.Stop();
-            _timer.Dispose();
+            Dispose(false);
         }
 
         public void Dispose()
@@ -59,30 +24,62 @@ namespace TubeScan.Scheduling
             Dispose(true);
         }
 
+        public IJobScheduler Register(IEnumerable<JobScheduleInfo> infos)
+        {
+            var timers = infos.Select(CreateJobScheduleTimer);
+
+            _jobs.AddRange(timers);
+
+            return this;
+        }
+
+        public void Start()
+        {
+            foreach (var job in _jobs)
+            {
+                job.Timer.Start();
+            }
+        }
+
+        public void Stop()
+        {
+            foreach (var job in _jobs)
+            {
+                job.Timer.Stop();
+            }
+        }
+
         private void Dispose(bool disposing)
         {
-            Stop();
+            foreach (var job in _jobs)
+            {
+                job.Timer.Dispose();
+            }
+            _jobs.Clear();
         }
 
-        private void timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        private JobScheduleTimer CreateJobScheduleTimer(JobScheduleInfo info)
         {
-            CycleJobs();
-        }
+            var timer = new System.Timers.Timer()
+            {
+                Interval = info.Frequency.TotalMilliseconds,
+                AutoReset = true,
+                Enabled = true,
+            };
 
-        private void CycleJobs()
-        {
-            _telemetry.Message($"Starting job cycle...");
+            timer.Elapsed += (object? sender, System.Timers.ElapsedEventArgs e) =>
+            {
+                timer.Stop();
+                var r = ExecuteJob(info).GetAwaiter().GetResult();
+                timer.Start();
+            };
 
-            var tasks = _jobs.Select(ExecuteJob).ToArray();
-
-            var results = Task.WhenAll(tasks);
-
-            _telemetry.Message($"Finished job cycle.");
+            return new JobScheduleTimer(timer, info);
         }
 
         private Task<JobExecuteResult> ExecuteJob(JobScheduleInfo job)
         {
-            var executor = new JobExecutor(_time, _telemetry);
+            var executor = new JobExecutor(_telemetry);
 
             return executor.ExecuteJobAsync(job);
         }

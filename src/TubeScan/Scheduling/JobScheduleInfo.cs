@@ -9,9 +9,7 @@
         }
 
         public TimeSpan Frequency { get; }
-
-        public DateTime LastExecution { get; set; }
-        
+                
         public IJob Job { get; }
     }
 }

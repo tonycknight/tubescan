@@ -28,11 +28,4 @@
 
         public Exception Exception { get; }
     }
-
-    internal class JobExecuteResultNotRun : JobExecuteResult
-    {
-        public JobExecuteResultNotRun(IJob job) : base(job, TimeSpan.Zero)
-        {
-        }
-    }
 }
