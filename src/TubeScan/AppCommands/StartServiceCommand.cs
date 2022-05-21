@@ -48,7 +48,8 @@ namespace TubeScan.AppCommands
             await CreateCommandHandler(_discordProxy);
             _telemetry.Message("Started client.");
 
-            _telemetry.Message("Starting job scheduler...");            
+            _telemetry.Message("Starting job scheduler...");
+            _jobScheduler.Register(GetJobSchedules());
             _jobScheduler.Start();
             _telemetry.Message("Finished job scheduler.");
 
@@ -97,6 +98,18 @@ namespace TubeScan.AppCommands
             await adminHandler.InstallCommandsAsync();
 
             return adminHandler;
+        }
+
+        private IEnumerable<JobScheduleInfo> GetJobSchedules()
+        {
+            var jobTypes = this.GetType().Assembly.GetTypes()
+                               .Where(t => t.IsClass && !t.IsAbstract && t.IsAssignableTo(typeof(IJob)));
+
+            return jobTypes.Select(_serviceProvider.GetService)
+                           .Where(o => o != null)
+                           .OfType<IJob>()
+                           .Select(j => new JobScheduleInfo(j, j.Frequency))
+                           .ToList();
         }
     }
 }

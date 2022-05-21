@@ -2,6 +2,7 @@
 {
     internal interface IJob
     {
+        TimeSpan Frequency { get; }
         Task ExecuteAsync();
     }
 }
