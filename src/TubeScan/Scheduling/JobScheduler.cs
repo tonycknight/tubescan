@@ -25,9 +25,13 @@ namespace TubeScan.Scheduling
 
         public bool Started => _timer.Enabled;
 
-        public IJobScheduler Register(JobScheduleInfo info)
+        public IJobScheduler Register(IEnumerable<JobScheduleInfo> infos)
         {
-            _jobs.Add(info);
+            foreach (var info in infos)
+            {
+                _jobs.Add(info);
+            }
+
             return this;
         }
 

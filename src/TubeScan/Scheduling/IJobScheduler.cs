@@ -2,7 +2,7 @@
 {
     internal interface IJobScheduler
     {
-        IJobScheduler Register(JobScheduleInfo info);
+        IJobScheduler Register(IEnumerable<JobScheduleInfo> infos);
 
         void Start();
 

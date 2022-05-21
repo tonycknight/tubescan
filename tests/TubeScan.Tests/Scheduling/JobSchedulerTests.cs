@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
+using Tk.Extensions;
 using Tk.Extensions.Time;
 using TubeScan.Scheduling;
 using TubeScan.Telemetry;
@@ -34,7 +35,7 @@ namespace TubeScan.Tests.Scheduling
 
             foreach (var job in jobs)
             {
-                js.Register(job);                
+                js.Register(job.Singleton());                
             }
 
             var check = js.Jobs.ToList();
@@ -60,7 +61,7 @@ namespace TubeScan.Tests.Scheduling
 
             foreach (var job in jobs)
             {
-                js.Register(job);
+                js.Register(job.Singleton());
             }
 
             js.Start();
@@ -102,7 +103,7 @@ namespace TubeScan.Tests.Scheduling
             var job = Substitute.For<IJob>();
             var jobInfo = new JobScheduleInfo(job, cycle);
                         
-            js.Register(jobInfo);
+            js.Register(jobInfo.Singleton());
 
             var sw = Stopwatch.StartNew();
             
