@@ -5,6 +5,7 @@ using Tk.Extensions;
 using Tk.Extensions.Reflection;
 using TubeScan.Config;
 using TubeScan.DiscordClient;
+using TubeScan.Scheduling;
 using TubeScan.Telemetry;
 
 namespace TubeScan.AppCommands
@@ -17,15 +18,17 @@ namespace TubeScan.AppCommands
         private readonly ITelemetry _telemetry;
         private readonly IAppConfigurationProvider _configProvider;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IJobScheduler _jobScheduler;
 
-        public StartServiceCommand(IDiscordProxy discordProxy, Telemetry.ITelemetry telemetry, 
-                                    Config.IAppConfigurationProvider configProvider,
-                                    IServiceProvider serviceProvider)
+        public StartServiceCommand(IDiscordProxy discordProxy, ITelemetry telemetry, 
+                                    IAppConfigurationProvider configProvider,
+                                    IServiceProvider serviceProvider, IJobScheduler jobScheduler)
         {
             _discordProxy = discordProxy;
             _telemetry = telemetry;
             _configProvider = configProvider;
             _serviceProvider = serviceProvider;
+            _jobScheduler = jobScheduler;
         }
 
         [Option(CommandOptionType.SingleValue, Description = "The configuration file's path.", LongName = "config", ShortName = "c")]
@@ -45,6 +48,10 @@ namespace TubeScan.AppCommands
             await CreateCommandHandler(_discordProxy);
             _telemetry.Message("Started client.");
 
+            _telemetry.Message("Starting job scheduler...");            
+            _jobScheduler.Start();
+            _telemetry.Message("Finished job scheduler.");
+
             _telemetry.Message("Startup complete.");
             _telemetry.Message($"Bot registration URI: {_discordProxy.BotRegistrationUri}");
             _telemetry.Message("Proxy started. Hit CTRL-C to quit");
@@ -53,6 +60,10 @@ namespace TubeScan.AppCommands
 
             Console.CancelKeyPress += async (object? sender, ConsoleCancelEventArgs e) =>
             {
+                _telemetry.Message("Shutting down job scheduler...");
+                _jobScheduler.Stop();
+                _telemetry.Message("Shut down job scheduler.");
+
                 _telemetry.Message("Shutting down services...");
 
                 await _discordProxy.StopAsync();
