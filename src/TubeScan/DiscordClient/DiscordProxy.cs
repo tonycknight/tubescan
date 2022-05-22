@@ -77,6 +77,12 @@ namespace TubeScan.DiscordClient
             _messageReceivedHandlers.Add(handler);
         }
 
+        public IEnumerable<IMessageChannel> GetChannels() 
+            => _client.Guilds.SelectMany(g => g.Channels)
+                .Where(c => c.Users.Count > 0)
+                .Select(c => c as IMessageChannel)
+                .Where(c => c != null);
+
         private Task client_Log(LogMessage arg)
         {
             _telemetry.Message(arg.Message);

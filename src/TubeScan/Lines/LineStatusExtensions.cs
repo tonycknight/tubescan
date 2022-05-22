@@ -5,6 +5,26 @@ namespace TubeScan.Lines
 {
     internal static class LineStatusExtensions
     {
+        public static IEnumerable<LineStatus> GetDeltas(this IEnumerable<LineStatus> lineStatuses, IEnumerable<LineStatus> newLineStatuses)
+        {
+            var getStatuses = (LineStatus ls) => ls.HealthStatuses.NullToEmpty().Select(hs => hs.TflHealth.ToLowerInvariant()).Distinct().OrderBy(s => s);
+
+            foreach(var lineStatus in lineStatuses)
+            {
+                var newLineStatus = newLineStatuses.FirstOrDefault(l => l.Id == lineStatus.Id);
+                if(newLineStatus != null)
+                {            
+                    var lineTflHealths = getStatuses(lineStatus);
+                    var newLineTflHealths = getStatuses(newLineStatus);
+
+                    if (!lineTflHealths.SequenceEqual(newLineTflHealths))
+                    {
+                        yield return newLineStatus;
+                    }
+                }
+            }
+        }
+
         public static IList<LineStatus> ToLineStatuses(this string json) 
             => Newtonsoft.Json.JsonConvert.DeserializeObject<TflLineStatusCheck[]>(json)
                                           .Select(ToLineStatus)

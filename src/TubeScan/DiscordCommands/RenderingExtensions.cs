@@ -32,14 +32,16 @@ namespace TubeScan.DiscordCommands
                         .Build();
         }
 
-        public static string RenderLinesStatus(this IList<Models.Line> lines, Dictionary<string, Models.LineStatus> stats, bool fullDetails)
-            => lines.OrderBy(l => l.Name)
-                .SelectMany(line =>
-                {
-                    var stat = stats.GetOrDefault(line.Id);
+        public static string RenderLinesStatus(this IEnumerable<Models.Line> lines, Dictionary<string, Models.LineStatus> stats, bool fullDetails)
+            => lines.Where(l => l != null)
+                    .OrderBy(l => l.Name)
+                    .SelectMany(line =>
+                    {
+                        var stat = stats.GetOrDefault(line.Id);
 
-                    return GetLineStatus(line, stat, fullDetails);
-                }).Join(Environment.NewLine);
+                        return GetLineStatus(line, stat, fullDetails);
+                    })
+                    .Join(Environment.NewLine);
 
         private static IEnumerable<string> GetCrowdingLines(this Models.StationStatus status)
         {
@@ -96,14 +98,21 @@ namespace TubeScan.DiscordCommands
             var header = $"**{line.Name}**";
             if (status == null)
             {
-                return GetLineStatus(header, line);
+                return GetLineStatus(header, fullDetails);
             }
             return GetLineStatus(header, status, fullDetails);
         }
 
-        private static IEnumerable<string> GetLineStatus(string header, Models.Line line)
+        private static IEnumerable<string> GetLineStatus(string header, bool fullDetails)
         {
-            yield return $"{header}: Unknown";
+            if (fullDetails)
+            {
+                yield return $"{header}: Unknown";
+            }
+            else
+            {
+                yield break;
+            }
         }
 
         private static IEnumerable<string> GetLineStatus(string header, Models.LineStatus status, bool fullDetails)
