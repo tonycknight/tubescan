@@ -96,14 +96,21 @@ namespace TubeScan.DiscordCommands
             var header = $"**{line.Name}**";
             if (status == null)
             {
-                return GetLineStatus(header, line);
+                return GetLineStatus(header, fullDetails);
             }
             return GetLineStatus(header, status, fullDetails);
         }
 
-        private static IEnumerable<string> GetLineStatus(string header, Models.Line line)
+        private static IEnumerable<string> GetLineStatus(string header, bool fullDetails)
         {
-            yield return $"{header}: Unknown";
+            if (fullDetails)
+            {
+                yield return $"{header}: Unknown";
+            }
+            else
+            {
+                yield break;
+            }
         }
 
         private static IEnumerable<string> GetLineStatus(string header, Models.LineStatus status, bool fullDetails)
