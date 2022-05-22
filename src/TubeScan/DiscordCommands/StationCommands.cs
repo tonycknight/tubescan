@@ -90,7 +90,7 @@ namespace TubeScan.DiscordCommands
         {
             try
             {
-                var responseMsg = await ReplyAsync("Thinking...");
+                var responseMsg = await ReplyAsync("*Thinking...*");
 
                 var authorId = Context.GetAuthorId();
 

@@ -23,7 +23,7 @@ namespace TubeScan.DiscordCommands
         {
             try
             {
-                var responseMsg = await ReplyAsync("Thinking...");
+                var responseMsg = await ReplyAsync("*Thinking...*");
                 
                 var lines = await _lineProvider.GetLinesAsync();
                 var statuses = await _lineProvider.GetLineStatusAsync();
