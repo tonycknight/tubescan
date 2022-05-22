@@ -23,7 +23,7 @@ namespace TubeScan.Lines
             _lineProvider = lineProvider;
         }
 
-        public TimeSpan Frequency => TimeSpan.FromSeconds(30);
+        public TimeSpan Frequency => TimeSpan.FromSeconds(60);
 
         public async Task ExecuteAsync()
         {
