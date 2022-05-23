@@ -27,7 +27,7 @@ namespace TubeScan
                 .AddSingleton<Stations.IStationTagRepository, Stations.MongoStationTagRepository>()
                 .AddSingleton<Users.IUsersRepository, Users.MongoUsersRepository>()
                 .AddSingleton<Scheduling.IJobScheduler, Scheduling.JobScheduler>()
-                //.AddSingleton<Lines.LineStatusPollingJob>()
+                .AddSingleton<Lines.LineStatusPollingJob>()
                 .BuildServiceProvider();
 
 
