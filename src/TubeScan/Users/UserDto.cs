@@ -11,5 +11,7 @@ namespace TubeScan.Users
         [BsonElement("userId")]
         public ulong UserId { get; set; }
 
+        [BsonElement("mention")]
+        public string Mention { get; set; }
     }
 }

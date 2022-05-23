@@ -31,7 +31,8 @@ namespace TubeScan.Users
             var col = _usersCol.Value;
             var filter = CreateEqualityFilter(value.Id);
 
-            var update = Builders<UserDto>.Update.Set(st => st.UserId, value.Id);
+            var update = Builders<UserDto>.Update.Set(u => u.UserId, value.Id)
+                                                 .Set(u => u.Mention, value.Mention);
 
             return col.UpdateOneAsync(filter, update, new UpdateOptions() { IsUpsert = true });
         }
@@ -47,7 +48,7 @@ namespace TubeScan.Users
 
         private IMongoCollection<UserDto> CreateUsersCollection(Config.MongoConfiguration config, IMongoDatabase db)
         {
-            var colName = config.StationTagsCollectionName;
+            var colName = config.UsersCollectionName;
             var col = db.GetCollection<UserDto>(colName);
             if (col == null)
             {
