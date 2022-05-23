@@ -25,7 +25,7 @@ namespace TubeScan.DiscordClient
 
             var clientConfig = new DiscordSocketConfig()
             {
-                AlwaysDownloadUsers = true,
+                AlwaysDownloadUsers = true
             };
 
             _client = new DiscordSocketClient(clientConfig);
@@ -77,7 +77,10 @@ namespace TubeScan.DiscordClient
             _messageReceivedHandlers.Add(handler);
         }
 
-        public IEnumerable<IMessageChannel> GetChannels() 
+        public IEnumerable<IMessageChannel> GetDmChannels()
+            => _client.DMChannels.Select(c => c as IMessageChannel).Where(c => c != null);
+
+        public IEnumerable<IMessageChannel> GetChannels()
             => _client.Guilds.SelectMany(g => g.Channels)
                 .Where(c => c.Users.Count > 0)
                 .Select(c => c as IMessageChannel)
