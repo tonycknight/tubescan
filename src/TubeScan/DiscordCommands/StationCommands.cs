@@ -84,7 +84,7 @@ namespace TubeScan.DiscordCommands
         }
 
         [Command("station", RunMode = RunMode.Async)]
-        [Alias("stn")]
+        [Alias("stn", "s")]
         [System.ComponentModel.Description("Get a station's status. Form: ``station <tag>``.")]
         public async Task GetStationStatusAsync(string tag)
         {
