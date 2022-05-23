@@ -4,7 +4,7 @@ namespace TubeScan.Users
 {
     internal interface IUsersRepository
     {
-        Task<IList<User>> GetAllUserIdsAsync();
+        Task<IList<User>> GetAllUsersAsync();
 
         Task SetUserAsync(User value);
     }

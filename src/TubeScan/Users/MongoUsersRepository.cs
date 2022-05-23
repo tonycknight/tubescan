@@ -15,16 +15,16 @@ namespace TubeScan.Users
             _usersCol = new Lazy<IMongoCollection<UserDto>>(() => InitialiseDb(config));
         }
 
-        public async Task<IList<User>> GetAllUserIdsAsync()
+        public async Task<IList<User>> GetAllUsersAsync()
         {
             var col = _usersCol.Value;
-            var filter = Builders<UserDto>.Filter.And(Builders<UserDto>.Filter.Eq(u => true, true));
-
+            
+            var filter = FilterDefinition<UserDto>.Empty;
+                        
             var result = (await col.FindAsync(filter)).ToEnumerable();
 
             return result.Select(x => x.FromDto()).ToList();
         }
-
 
         public Task SetUserAsync(User value)
         {
