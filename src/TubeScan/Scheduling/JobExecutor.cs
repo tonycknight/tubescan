@@ -20,9 +20,9 @@ namespace TubeScan.Scheduling
             try
             {
                 sw.Start();
-                _telemetry.Message($"Starting job {job.Job.GetType().Name}...");
+                $"Starting job {job.Job.GetType().Name}...".CreateTelemetryEvent().Send(_telemetry);
                 await job.Job.ExecuteAsync();
-                _telemetry.Message($"Finished job {job.Job.GetType().Name}.");
+                $"Finished job {job.Job.GetType().Name}.".CreateTelemetryEvent().Send(_telemetry);
                 sw.Stop();
 
                 return new JobExecuteResultOk(job.Job, sw.Elapsed);
@@ -30,7 +30,7 @@ namespace TubeScan.Scheduling
             catch (Exception ex)
             {
                 sw.Stop();
-                _telemetry.Error(ex.Message);
+                ex.Message.CreateTelemetryEvent(TelemetryEventKind.Error).Send(_telemetry);
                 return new JobExecuteResultError(job.Job, sw.Elapsed, ex);
             }            
         }

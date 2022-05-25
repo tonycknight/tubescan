@@ -50,7 +50,7 @@ namespace TubeScan.DiscordCommands
             }
             catch (Exception ex)
             {
-                _telemetry.Message(ex.ToString());
+                ex.ToString().CreateTelemetryEvent(TelemetryEventKind.Error).Send(_telemetry);
                 ReplyAsync(ex.Message);
             }
         }
@@ -78,7 +78,7 @@ namespace TubeScan.DiscordCommands
             }
             catch (Exception ex)
             {
-                _telemetry.Message(ex.ToString());
+                ex.ToString().CreateTelemetryEvent(TelemetryEventKind.Error).Send(_telemetry);
                 ReplyAsync(ex.Message);
             }
         }
@@ -131,7 +131,7 @@ namespace TubeScan.DiscordCommands
             }
             catch (Exception ex)
             {
-                _telemetry.Message(ex.ToString());
+                ex.ToString().CreateTelemetryEvent(TelemetryEventKind.Error).Send(_telemetry);
                 ReplyAsync(ex.Message);
             }            
         }

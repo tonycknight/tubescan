@@ -47,7 +47,7 @@ namespace TubeScan.DiscordCommands
             }
             catch (Exception ex)
             {
-                _telemetry.Message(ex.ToString());
+                ex.ToString().CreateTelemetryEvent().Send(_telemetry);
                 ReplyAsync(ex.Message);
             }
         }

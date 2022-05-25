@@ -39,33 +39,34 @@ namespace TubeScan.AppCommands
             var config = GetConfig();
 
             var attrs = typeof(ProgramBootstrap).Assembly.GetCustomAttributes();
-            _telemetry.Highlight($"{attrs.GetAttributeValue<AssemblyProductAttribute>(a => a.Product)} {attrs.GetAttributeValue<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion).Format("Version {0}")}");
+            $"{attrs.GetAttributeValue<AssemblyProductAttribute>(a => a.Product)} {attrs.GetAttributeValue<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion).Format("Version {0}")}"
+                .CreateTelemetryEvent(TelemetryEventKind.Highlight).Send(_telemetry);
 
-            _telemetry.Message("Starting services...");
-            
-            _telemetry.Message("Starting client...");
+            "Starting services...".CreateTelemetryEvent().Send(_telemetry);
+
+            "Starting client...".CreateTelemetryEvent().Send(_telemetry);
             await _discordProxy.StartAsync();
             await CreateCommandHandler(_discordProxy);
-            _telemetry.Message("Started client.");
+            "Started client.".CreateTelemetryEvent().Send(_telemetry);
 
-            _telemetry.Message("Starting job scheduler...");
+            "Starting job scheduler...".CreateTelemetryEvent().Send(_telemetry);
             _jobScheduler.Register(GetJobSchedules());
             _jobScheduler.Start();
-            _telemetry.Message("Finished job scheduler.");
+            "Finished job scheduler.".CreateTelemetryEvent().Send(_telemetry);
 
-            _telemetry.Message("Startup complete.");
-            _telemetry.Highlight($"Bot registration URI: {_discordProxy.BotRegistrationUri}");
-            _telemetry.Highlight("Proxy started. Hit CTRL-C to quit");
+            "Startup complete.".CreateTelemetryEvent().Send(_telemetry);
+            $"Bot registration URI: {_discordProxy.BotRegistrationUri}".CreateTelemetryEvent(TelemetryEventKind.Highlight).Send(_telemetry);
+            "Proxy started. Hit CTRL-C to quit".CreateTelemetryEvent(TelemetryEventKind.Highlight).Send(_telemetry);
 
             var cts = new CancellationTokenSource();
 
             Console.CancelKeyPress += async (object? sender, ConsoleCancelEventArgs e) =>
-            {
-                _telemetry.Message("Shutting down job scheduler...");
+            {                
+                "Shutting down job scheduler...".CreateTelemetryEvent().Send(_telemetry);
                 _jobScheduler.Stop();
-                _telemetry.Message("Shut down job scheduler.");
+                "Shut down job scheduler.".CreateTelemetryEvent().Send(_telemetry);
 
-                _telemetry.Message("Shutting down services...");
+                "Shutting down services...".CreateTelemetryEvent().Send(_telemetry);
 
                 await _discordProxy.StopAsync();
 
@@ -73,7 +74,7 @@ namespace TubeScan.AppCommands
                 
                 cts.Cancel();
 
-                _telemetry.Message("Services shutdown");
+                "Services shutdown".CreateTelemetryEvent().Send(_telemetry);
             };
 
             WaitHandle.WaitAll(new[] { cts.Token.WaitHandle });

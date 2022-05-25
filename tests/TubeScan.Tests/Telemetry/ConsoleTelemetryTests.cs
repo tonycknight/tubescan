@@ -53,7 +53,7 @@ namespace TubeScan.Tests.Telemetry
             var t = new ConsoleTelemetry(w);
             var msg = "test";
 
-            t.Message(msg);
+            msg.CreateTelemetryEvent().Send(t);
 
             r.Should().Contain(msg);
         }
@@ -69,7 +69,7 @@ namespace TubeScan.Tests.Telemetry
             var t = new ConsoleTelemetry(w);
             var msg = "test";
 
-            t.Error(msg);
+            msg.CreateTelemetryEvent(TelemetryEventKind.Error).Send(t);
 
             r.Should().Contain(msg);
         }

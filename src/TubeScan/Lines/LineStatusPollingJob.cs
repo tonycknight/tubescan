@@ -32,7 +32,7 @@ namespace TubeScan.Lines
         {
             var newLineStatuses = await _lineProvider.GetLineStatusAsync();
 
-            _telemetry.Message($"Received {newLineStatuses.Count} line statuses from TFL.");
+            $"Received {newLineStatuses.Count} line statuses from TFL.".CreateTelemetryEvent().Send(_telemetry);
 
             if (_lastKnownLineStatuses != null && newLineStatuses.NullToEmpty().Any())
             {                
@@ -49,7 +49,7 @@ namespace TubeScan.Lines
 
         private async Task BroadcastToUsersAsync(Dictionary<string, Line> lines, Dictionary<string, LineStatus> newStatuses)
         {
-            _telemetry.Message($"Found {newStatuses.Count} new line statuses.");
+            $"Found {newStatuses.Count} new line statuses.".CreateTelemetryEvent().Send(_telemetry);
 
             var users = await _usersRepo.GetAllUsersAsync();            
             if (users.Count > 0)
@@ -57,14 +57,14 @@ namespace TubeScan.Lines
                 var userIds = users.Select(u => u.Id);
                 var discordUsers = await _discordProxy.GetUsersAsync(userIds);
 
-                _telemetry.Message($"Broadcasting to {users.Count} users...");
+                $"Broadcasting to {users.Count} users...".CreateTelemetryEvent().Send(_telemetry);
                 foreach (var newStatus in newStatuses)
                 {
                     var line = lines.GetOrDefault(newStatus.Key);
                     await BroadcastLineStatusAsync(discordUsers, line, newStatus.Value);
                 }
             }
-            _telemetry.Message($"Broadcasted to {users.Count} users.");
+            $"Broadcasted to {users.Count} users.".CreateTelemetryEvent().Send(_telemetry);
         }
 
         private async Task BroadcastLineStatusAsync(IEnumerable<Discord.IUser> users, Line line, LineStatus lineStatus)
@@ -84,7 +84,7 @@ namespace TubeScan.Lines
                 }
                 catch (Exception ex)
                 {
-                    _telemetry.Error(ex.Message);
+                    ex.Message.CreateTelemetryEvent(TelemetryEventKind.Error).Send(_telemetry);
                 }
             }
         }

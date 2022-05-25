@@ -27,8 +27,7 @@ namespace TubeScan.Tests.Scheduling
             result.Should().BeOfType<JobExecuteResultOk>();
             result.Duration.Should().BeGreaterThan(TimeSpan.Zero);
             await job.Received(1).ExecuteAsync();
-            t.Received(2).Message(Arg.Any<string>());
-            t.Received(0).Error(Arg.Any<string>());
+            t.Received(2).Event(Arg.Any<TelemetryEvent>());
         }
 
         [Fact]
@@ -50,8 +49,7 @@ namespace TubeScan.Tests.Scheduling
             result.Exception.Should().NotBeNull();
             result.Duration.Should().BeGreaterThan(TimeSpan.Zero);
             await job.Received(1).ExecuteAsync();
-            t.Received(1).Message(Arg.Any<string>());
-            t.Received(1).Error(Arg.Any<string>());
+            t.Received(2).Event(Arg.Any<TelemetryEvent>());
         }
 
         private ITelemetry CreateMockTelemetry() => Substitute.For<ITelemetry>();

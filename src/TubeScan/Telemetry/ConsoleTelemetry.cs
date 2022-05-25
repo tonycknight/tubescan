@@ -25,26 +25,11 @@ namespace TubeScan.Telemetry
             _writeMessage(line);
         }
 
-        public void Message(string message) =>
-            Event(new TelemetryEvent { Message = message, Kind = TelemetryEventKind.Info });
-
-        public void Error(string message) =>
-            Event(new TelemetryEvent { Message = message, Kind = TelemetryEventKind.Error });
-
-        public void Warning(string message) =>
-            Event(new TelemetryEvent { Message = message, Kind = TelemetryEventKind.Warning });
-
-        public void Debug(string message) =>
-            Event(new TelemetryEvent { Message = message, Kind = TelemetryEventKind.Debug });
-
-        public void Highlight(string message) =>
-            Event(new TelemetryEvent { Message = message, Kind = TelemetryEventKind.Highlight });
-
         private string Kind(TelemetryEventKind kind) {
             var msg = kind switch
             {
                 TelemetryEventKind.Error => "ERROR",
-                TelemetryEventKind.Debug => "DEBUG",
+                TelemetryEventKind.Trace => "TRACE",
                 TelemetryEventKind.Info => "INFO",
                 TelemetryEventKind.Warning => "WARN",
                 _ => ""
@@ -57,7 +42,7 @@ namespace TubeScan.Telemetry
             => kind switch
             {
                 TelemetryEventKind.Error => Output.Bright.Red(message),
-                TelemetryEventKind.Debug => Output.Dim(message),
+                TelemetryEventKind.Trace => Output.Dim(message),
                 TelemetryEventKind.Info => Output.Bright.White(message),
                 TelemetryEventKind.Warning => Output.Bright.Yellow(message),
                 TelemetryEventKind.Highlight => Output.Bright.Cyan(message),

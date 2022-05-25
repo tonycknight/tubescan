@@ -88,7 +88,7 @@ namespace TubeScan.DiscordClient
 
         private Task client_Log(LogMessage arg)
         {
-            _telemetry.Message(arg.Message);
+            arg.Message.CreateTelemetryEvent(TelemetryEventKind.Trace).Send(_telemetry);
 
             return Task.CompletedTask;
         }
@@ -135,7 +135,7 @@ namespace TubeScan.DiscordClient
                     : $"[{msg.Channel.Name}]";
 
                 var line = $"{prefix} [Message {msg.Id}] [{UserLogPrefix(msg.Author)}] {msg.Content}";
-                _telemetry.Message(line);
+                line.CreateTelemetryEvent().Send(_telemetry);
             }
         }
 
