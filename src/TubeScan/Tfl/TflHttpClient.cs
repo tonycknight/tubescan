@@ -27,7 +27,7 @@ namespace TubeScan.Tfl
         {            
             try
             {
-                $"Sending GET request to TFL: {path}...".CreateTelemetryEvent().Send(_telemetry);
+                $"Sending GET request to TFL: {path}...".CreateTelemetryEvent(TelemetryEventKind.Trace).Send(_telemetry);
                 var client = _httpFactory.CreateClient("tfl");
 
                 var uri = _tflDomain.CreateUri(path, null);
@@ -40,7 +40,7 @@ namespace TubeScan.Tfl
 
                 var resp = await client.SendAsync(msg);
 
-                $"Received {resp.StatusCode} from TFL {path}.".CreateTelemetryEvent().Send(_telemetry);
+                $"Received {resp.StatusCode} from TFL {path}.".CreateTelemetryEvent(TelemetryEventKind.Trace).Send(_telemetry);
 
                 return new TflResponse()
                 {
