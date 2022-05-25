@@ -18,15 +18,21 @@
         }
 
         public void Message(string message)
-        {
-            var evt = new TelemetryEvent() { Message = message };
-            Event(evt);
-        }
+            => Event(CreateEvent(TelemetryEventKind.Info, message));
 
         public void Error(string message)
-        {
-            var evt = new TelemetryEvent() { Message = message };
-            Event(evt);
-        }
+            => Event(CreateEvent(TelemetryEventKind.Error, message));
+
+        public void Warning(string message)
+            => Event(CreateEvent(TelemetryEventKind.Warning, message));
+
+        public void Debug(string message)
+            => Event(CreateEvent(TelemetryEventKind.Debug, message));
+
+        public void Highlight(string message)
+            => Event(CreateEvent(TelemetryEventKind.Highlight, message));
+
+        private TelemetryEvent CreateEvent(TelemetryEventKind kind, string message)
+            => new TelemetryEvent() { Kind = kind, Message = message };
     }
 }

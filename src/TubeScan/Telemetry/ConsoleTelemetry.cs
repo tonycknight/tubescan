@@ -1,4 +1,6 @@
-﻿namespace TubeScan.Telemetry
+﻿using Crayon;
+
+namespace TubeScan.Telemetry
 {
     internal class ConsoleTelemetry : ITelemetry
     {
@@ -15,15 +17,51 @@
 
         public void Event(TelemetryEvent evt)
         {
-            var line = $"[{evt.Time.ToString("yyyy-MM-dd HH:mm:ss.fff")}] {evt.Message}";
+            var kind = Kind(evt.Kind);
+            kind = kind.Length > 0 ? $"{kind} " : "";
+
+            var line = $"[{evt.Time.ToString("yyyy-MM-dd HH:mm:ss.fff")}] {kind}{Colour(evt.Kind, evt.Message)}";
 
             _writeMessage(line);
         }
 
         public void Message(string message) =>
-            Event(new TelemetryEvent { Message = message });
+            Event(new TelemetryEvent { Message = message, Kind = TelemetryEventKind.Info });
 
         public void Error(string message) =>
-            Event(new TelemetryEvent { Message = message });
+            Event(new TelemetryEvent { Message = message, Kind = TelemetryEventKind.Error });
+
+        public void Warning(string message) =>
+            Event(new TelemetryEvent { Message = message, Kind = TelemetryEventKind.Warning });
+
+        public void Debug(string message) =>
+            Event(new TelemetryEvent { Message = message, Kind = TelemetryEventKind.Debug });
+
+        public void Highlight(string message) =>
+            Event(new TelemetryEvent { Message = message, Kind = TelemetryEventKind.Highlight });
+
+        private string Kind(TelemetryEventKind kind) {
+            var msg = kind switch
+            {
+                TelemetryEventKind.Error => "ERROR",
+                TelemetryEventKind.Debug => "DEBUG",
+                TelemetryEventKind.Info => "INFO",
+                TelemetryEventKind.Warning => "WARN",
+                _ => ""
+            };
+
+            return msg.Length > 0 ? $"[{Colour(kind, msg)}]" : msg;
+        }
+
+        private string Colour(TelemetryEventKind kind, string message)
+            => kind switch
+            {
+                TelemetryEventKind.Error => Output.Bright.Red(message),
+                TelemetryEventKind.Debug => Output.Dim(message),
+                TelemetryEventKind.Info => Output.Bright.White(message),
+                TelemetryEventKind.Warning => Output.Bright.Yellow(message),
+                TelemetryEventKind.Highlight => Output.Bright.Cyan(message),
+                _ => message
+            };
     }
 }

@@ -21,7 +21,7 @@ namespace TubeScan.Tests.Telemetry
 
             t.Event(evt);
 
-            r.Should().EndWith(evt.Message);
+            r.Should().Contain(evt.Message);
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace TubeScan.Tests.Telemetry
 
             t.Message(msg);
 
-            r.Should().EndWith(msg);
+            r.Should().Contain(msg);
         }
 
 
@@ -71,7 +71,7 @@ namespace TubeScan.Tests.Telemetry
 
             t.Error(msg);
 
-            r.Should().EndWith(msg);
+            r.Should().Contain(msg);
         }
     }
 }

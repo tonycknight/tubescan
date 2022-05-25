@@ -39,7 +39,7 @@ namespace TubeScan.AppCommands
             var config = GetConfig();
 
             var attrs = typeof(ProgramBootstrap).Assembly.GetCustomAttributes();
-            _telemetry.Message($"{attrs.GetAttributeValue<AssemblyProductAttribute>(a => a.Product)} {attrs.GetAttributeValue<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion).Format("Version {0}")}");
+            _telemetry.Highlight($"{attrs.GetAttributeValue<AssemblyProductAttribute>(a => a.Product)} {attrs.GetAttributeValue<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion).Format("Version {0}")}");
 
             _telemetry.Message("Starting services...");
             
@@ -54,8 +54,8 @@ namespace TubeScan.AppCommands
             _telemetry.Message("Finished job scheduler.");
 
             _telemetry.Message("Startup complete.");
-            _telemetry.Message($"Bot registration URI: {_discordProxy.BotRegistrationUri}");
-            _telemetry.Message("Proxy started. Hit CTRL-C to quit");
+            _telemetry.Highlight($"Bot registration URI: {_discordProxy.BotRegistrationUri}");
+            _telemetry.Highlight("Proxy started. Hit CTRL-C to quit");
 
             var cts = new CancellationTokenSource();
 
