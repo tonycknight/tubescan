@@ -21,7 +21,7 @@ namespace TubeScan.Tests.Telemetry
 
             t.Event(evt);
 
-            r.Should().EndWith(evt.Message);
+            r.Should().Contain(evt.Message);
         }
 
         [Fact]
@@ -53,9 +53,9 @@ namespace TubeScan.Tests.Telemetry
             var t = new ConsoleTelemetry(w);
             var msg = "test";
 
-            t.Message(msg);
+            msg.CreateTelemetryEvent().Send(t);
 
-            r.Should().EndWith(msg);
+            r.Should().Contain(msg);
         }
 
 
@@ -69,9 +69,9 @@ namespace TubeScan.Tests.Telemetry
             var t = new ConsoleTelemetry(w);
             var msg = "test";
 
-            t.Error(msg);
+            msg.CreateTelemetryEvent(TelemetryEventKind.Error).Send(t);
 
-            r.Should().EndWith(msg);
+            r.Should().Contain(msg);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace TubeScan.DiscordCommands
         {
             try
             {
-                var responseMsg = await ReplyAsync("Thinking...");
+                var responseMsg = await ReplyAsync(":thinking: *Thinking...*");
                 
                 var lines = await _lineProvider.GetLinesAsync();
                 var statuses = await _lineProvider.GetLineStatusAsync();
@@ -50,7 +50,7 @@ namespace TubeScan.DiscordCommands
             }
             catch (Exception ex)
             {
-                _telemetry.Message(ex.ToString());
+                ex.ToString().CreateTelemetryEvent().Send(_telemetry);
                 ReplyAsync(ex.Message);
             }
         }

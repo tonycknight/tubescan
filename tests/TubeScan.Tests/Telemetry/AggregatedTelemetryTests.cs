@@ -37,7 +37,7 @@ namespace TubeScan.Tests.Telemetry
 
             var evt = new TelemetryEvent() { Message = "test" };
 
-            aggTelemetry.Message(evt.Message);
+            evt.Message.CreateTelemetryEvent().Send(aggTelemetry);
 
             foreach (var t in telemetries)
             {
@@ -56,7 +56,7 @@ namespace TubeScan.Tests.Telemetry
 
             var evt = new TelemetryEvent() { Message = "test" };
 
-            aggTelemetry.Error(evt.Message);
+            evt.Message.CreateTelemetryEvent(TelemetryEventKind.Error).Send(aggTelemetry);
 
             foreach (var t in telemetries)
             {

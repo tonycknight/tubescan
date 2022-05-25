@@ -13,5 +13,7 @@ namespace TubeScan.Config
         [JsonProperty("stationTagsCollectionName")]
         public string? StationTagsCollectionName { get; set; } = "stationtags";
 
+        [JsonProperty("usersCollectionName")]
+        public string? UsersCollectionName { get; set; } = "users";
     }
 }

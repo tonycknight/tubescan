@@ -25,7 +25,7 @@ namespace TubeScan.DiscordClient
 
             var clientConfig = new DiscordSocketConfig()
             {
-                AlwaysDownloadUsers = true,
+                AlwaysDownloadUsers = true
             };
 
             _client = new DiscordSocketClient(clientConfig);
@@ -76,16 +76,19 @@ namespace TubeScan.DiscordClient
         {
             _messageReceivedHandlers.Add(handler);
         }
+                
+        public async Task<IList<IUser>> GetUsersAsync(IEnumerable<ulong> userIds)
+        {
+            var tasks = userIds.ToArray()
+                .Select(GetUserAsync)
+                .ToArray();
 
-        public IEnumerable<IMessageChannel> GetChannels() 
-            => _client.Guilds.SelectMany(g => g.Channels)
-                .Where(c => c.Users.Count > 0)
-                .Select(c => c as IMessageChannel)
-                .Where(c => c != null);
+            return await Task.WhenAll(tasks);
+        }
 
         private Task client_Log(LogMessage arg)
         {
-            _telemetry.Message(arg.Message);
+            arg.Message.CreateTelemetryEvent(TelemetryEventKind.Trace).Send(_telemetry);
 
             return Task.CompletedTask;
         }
@@ -132,10 +135,16 @@ namespace TubeScan.DiscordClient
                     : $"[{msg.Channel.Name}]";
 
                 var line = $"{prefix} [Message {msg.Id}] [{UserLogPrefix(msg.Author)}] {msg.Content}";
-                _telemetry.Message(line);
+                line.CreateTelemetryEvent().Send(_telemetry);
             }
         }
 
         private string UserLogPrefix(IUser user) => $"{user.Id} {user.Username}#{user.Discriminator}";
+
+        private async Task<IUser> GetUserAsync(ulong userId)
+        {
+            return await _client.GetUserAsync(userId);
+        }
+
     }
 }

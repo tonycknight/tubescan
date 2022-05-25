@@ -2,6 +2,7 @@
 using Discord.Commands;
 using Tk.Extensions;
 using TubeScan.Telemetry;
+using TubeScan.Users;
 
 namespace TubeScan.DiscordCommands
 {
@@ -9,10 +10,12 @@ namespace TubeScan.DiscordCommands
     internal class SessionCommands : ModuleBase<SocketCommandContext>
     {
         private readonly ITelemetry _telemetry;
+        private readonly IUsersRepository _usersRepo;
 
-        public SessionCommands(ITelemetry telemetry)
+        public SessionCommands(ITelemetry telemetry, IUsersRepository usersRepo)
         {
             _telemetry = telemetry;
+            _usersRepo = usersRepo;
         }
 
         [Command("start", RunMode = RunMode.Async)]
@@ -39,10 +42,12 @@ namespace TubeScan.DiscordCommands
                 {                    
                     ReplyAsync(helpMsg);
                 }
+
+                await _usersRepo.SetUserAsync(new Models.User(authorId, Context.GetAuthorMention()));
             }
             catch (Exception ex)
             {
-                _telemetry.Message(ex.ToString());
+                ex.ToString().CreateTelemetryEvent().Send(_telemetry);
                 ReplyAsync(ex.Message);
             }
         }

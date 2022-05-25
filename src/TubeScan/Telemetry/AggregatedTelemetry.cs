@@ -16,17 +16,5 @@
                 t.Event(evt);
             }
         }
-
-        public void Message(string message)
-        {
-            var evt = new TelemetryEvent() { Message = message };
-            Event(evt);
-        }
-
-        public void Error(string message)
-        {
-            var evt = new TelemetryEvent() { Message = message };
-            Event(evt);
-        }
     }
 }

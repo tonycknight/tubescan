@@ -50,7 +50,7 @@ namespace TubeScan.DiscordCommands
             }
             catch (Exception ex)
             {
-                _telemetry.Message(ex.ToString());
+                ex.ToString().CreateTelemetryEvent(TelemetryEventKind.Error).Send(_telemetry);
                 ReplyAsync(ex.Message);
             }
         }
@@ -78,19 +78,19 @@ namespace TubeScan.DiscordCommands
             }
             catch (Exception ex)
             {
-                _telemetry.Message(ex.ToString());
+                ex.ToString().CreateTelemetryEvent(TelemetryEventKind.Error).Send(_telemetry);
                 ReplyAsync(ex.Message);
             }
         }
 
         [Command("station", RunMode = RunMode.Async)]
-        [Alias("stn")]
+        [Alias("stn", "s")]
         [System.ComponentModel.Description("Get a station's status. Form: ``station <tag>``.")]
         public async Task GetStationStatusAsync(string tag)
         {
             try
             {
-                var responseMsg = await ReplyAsync("Thinking...");
+                var responseMsg = await ReplyAsync(":thinking: *Thinking...*");
 
                 var authorId = Context.GetAuthorId();
 
@@ -131,7 +131,7 @@ namespace TubeScan.DiscordCommands
             }
             catch (Exception ex)
             {
-                _telemetry.Message(ex.ToString());
+                ex.ToString().CreateTelemetryEvent(TelemetryEventKind.Error).Send(_telemetry);
                 ReplyAsync(ex.Message);
             }            
         }
