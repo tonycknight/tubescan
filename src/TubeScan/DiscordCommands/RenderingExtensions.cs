@@ -129,7 +129,7 @@ namespace TubeScan.DiscordCommands
                 yield return status.HealthStatuses.Count > 1 ? healthStatus(s) : $"{header}: {healthStatus(s)}";
                 if (!string.IsNullOrEmpty(s.Description))
                 {
-                    yield return $"> ``{s.Description}``";
+                    yield return $"> {s.Description}";
                 }
                 if (fullDetails && s.AffectedStations?.Any() == true)
                 {
