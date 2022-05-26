@@ -28,7 +28,7 @@ namespace TubeScan.Tfl
             try
             {
                 $"Sending GET request to TFL: {path}...".CreateTelemetryEvent(TelemetryEventKind.Trace).Send(_telemetry);
-                var client = _httpFactory.CreateClient("tfl");
+                var client = _httpFactory.CreateClient(ITflClient.HttpClientName);
 
                 var uri = _tflDomain.CreateUri(path, null);
 
