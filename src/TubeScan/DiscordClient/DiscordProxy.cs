@@ -135,7 +135,7 @@ namespace TubeScan.DiscordClient
                     : $"[{msg.Channel.Name}]";
 
                 var line = $"{prefix} [Message {msg.Id}] [{UserLogPrefix(msg.Author)}] {msg.Content}";
-                line.CreateTelemetryEvent().Send(_telemetry);
+                line.CreateTelemetryEvent(TelemetryEventKind.Trace).Send(_telemetry);
             }
         }
 
