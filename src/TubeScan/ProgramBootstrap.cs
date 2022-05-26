@@ -3,14 +3,15 @@ using Crayon;
 using Microsoft.Extensions.DependencyInjection;
 using Tk.Extensions;
 using Tk.Extensions.Reflection;
+using Polly;
 using Tk.Extensions.Time;
 
 namespace TubeScan
 {
     internal class ProgramBootstrap
     {
-        public static IServiceProvider CreateServiceCollection() =>
-            new ServiceCollection()
+        public static IServiceProvider CreateServiceCollection() {
+            var col = new ServiceCollection()
                 .AddSingleton<DiscordClient.IDiscordProxy, DiscordClient.DiscordProxy>()
                 .AddSingleton<IList<Telemetry.ITelemetry>>(sp => new Telemetry.ITelemetry[] { new Telemetry.ConsoleTelemetry() })
                 .AddSingleton<Telemetry.ITelemetry, Telemetry.AggregatedTelemetry>()
@@ -19,7 +20,6 @@ namespace TubeScan
                 .AddSingleton<Config.FileAppConfigurationProvider>()
                 .AddSingleton<Config.EnvVarAppConfigurationProvider>()
                 .AddSingleton<Config.IAppConfigurationProvider, Config.AppConfigurationProvider>()
-                .AddHttpClient()
                 .AddSingleton<Tfl.ITflClient, Tfl.TflHttpClient>()
                 .AddSingleton<Lines.ILineProvider, Lines.TflLineProvider>()
                 .AddSingleton<Stations.IStationProvider, Stations.StationProvider>()
@@ -27,9 +27,15 @@ namespace TubeScan
                 .AddSingleton<Stations.IStationTagRepository, Stations.MongoStationTagRepository>()
                 .AddSingleton<Users.IUsersRepository, Users.MongoUsersRepository>()
                 .AddSingleton<Scheduling.IJobScheduler, Scheduling.JobScheduler>()
-                .AddSingleton<Lines.LineStatusPollingJob>()
-                .BuildServiceProvider();
+                .AddSingleton<Lines.LineStatusPollingJob>();
 
+            var rateLimit = Policy.RateLimitAsync<HttpResponseMessage>(500, TimeSpan.FromMinutes(1), 20);
+            
+            var hcb = col.AddHttpClient(Tfl.ITflClient.HttpClientName)
+                         .AddPolicyHandler(rateLimit);
+            
+            return col.BuildServiceProvider();
+        }
 
         public static string GetDescription()
         {
@@ -62,5 +68,6 @@ namespace TubeScan
                 "Contains OS data (c) Crown copyright and database rights 2016",
                 "Geomni UK Map data (c) and database rights 2019"
             };
+
     }
 }

@@ -6,3 +6,4 @@ Microsoft.Extensions.DependencyInjection
 MongoDB.Driver
 Microsoft.Extensions.Http
 Tk.Extensions
+Microsoft.Extensions.Http.Polly

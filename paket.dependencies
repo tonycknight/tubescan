@@ -11,6 +11,7 @@ nuget FsCheck.Xunit
 nuget McMaster.Extensions.CommandLineUtils 4.0.1
 nuget Microsoft.Extensions.DependencyInjection 6.0
 nuget Microsoft.Extensions.Http
+nuget Microsoft.Extensions.Http.Polly
 nuget Microsoft.NET.Test.Sdk 16.11.0
 nuget MongoDB.Driver
 nuget NSubstitute
