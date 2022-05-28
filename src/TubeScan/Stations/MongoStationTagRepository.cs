@@ -35,12 +35,14 @@ namespace TubeScan.Stations
             return result.Select(x => x.FromDto()).OrderBy(t => t.Tag).ToList();
         }
 
-        public async Task RemoveAsync(ulong userId, string tag)
+        public async Task<bool> RemoveAsync(ulong userId, string tag)
         {
             var col = _tagsCol.Value;
             var filter = CreateTagEqualityFilter(userId, tag);
 
-            await col.DeleteOneAsync(filter);
+            var result = await col.DeleteOneAsync(filter);
+
+            return result.DeletedCount > 0;
         }
 
         public Task SetAsync(ulong userId, StationTag tag)

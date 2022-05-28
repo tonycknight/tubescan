@@ -63,9 +63,9 @@ namespace TubeScan.DiscordCommands
             {
                 var authorId = Context.GetAuthorId();
 
-                await _tagRepo.RemoveAsync(authorId, tagName);
-
-                ReplyAsync($"Done.");
+                var deleted = await _tagRepo.RemoveAsync(authorId, tagName);
+                
+                ReplyAsync(deleted ? "Done." : "The tag was not found.");
             }
             catch (Exception ex)
             {
