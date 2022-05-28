@@ -117,8 +117,7 @@ namespace TubeScan.DiscordCommands
 
         private static IEnumerable<string> GetLineStatus(string header, Models.LineStatus status, bool fullDetails)
         {
-            var healthStatus = (Models.LineHealthStatus s)
-                    => s.Health == Models.HealthStatus.Ok ? s.Health.ToString() : $"***{s.TflHealth}***";
+            var healthStatus = (Models.LineHealthStatus s) => $"***{s.TflHealth}***";
 
             if (status.HealthStatuses.Count > 1)
             {

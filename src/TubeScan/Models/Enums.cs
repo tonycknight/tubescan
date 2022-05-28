@@ -3,7 +3,7 @@
     internal enum HealthStatus
     {
         Unknown,
-        Ok,
+        GoodService,
         PartialService,
         SevereDelays,
         NoService
