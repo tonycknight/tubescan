@@ -1,7 +1,7 @@
 # Bot commands
 
 
-``!start`` to start a private conversation with the Bot. Alternatively, just message the bot directly.
+``start`` to start a private conversation with the Bot. Alternatively, just message the bot directly.
 
 ``lines`` Get the current status of all Tube lines.
 
