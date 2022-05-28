@@ -18,7 +18,7 @@ namespace TubeScan.Stations
         public async Task<StationTag> GetAsync(ulong userId, string tag)
         {
             var col = _tagsCol.Value;
-            var filter = CreateEqualityFilter(userId, tag);
+            var filter = CreateTagEqualityFilter(userId, tag);
 
             var result = (await col.FindAsync(filter)).FirstOrDefault();
 
@@ -35,10 +35,18 @@ namespace TubeScan.Stations
             return result.Select(x => x.FromDto()).OrderBy(t => t.Tag).ToList();
         }
 
+        public async Task RemoveAsync(ulong userId, string tag)
+        {
+            var col = _tagsCol.Value;
+            var filter = CreateTagEqualityFilter(userId, tag);
+
+            await col.DeleteOneAsync(filter);
+        }
+
         public Task SetAsync(ulong userId, StationTag tag)
         {
             var col = _tagsCol.Value;
-            var filter = CreateEqualityFilter(userId, tag.Tag);
+            var filter = CreateTagEqualityFilter(userId, tag.Tag);
 
             var update = Builders<StationTagDto>.Update.Set(st => st.UserId, userId)
                                                        .Set(st => st.Tag, tag.Tag.ToLower())
@@ -47,7 +55,7 @@ namespace TubeScan.Stations
             return col.UpdateOneAsync(filter, update, new UpdateOptions() { IsUpsert = true });
         }
 
-        private FilterDefinition<StationTagDto> CreateEqualityFilter(ulong userId, string tag)
+        private FilterDefinition<StationTagDto> CreateTagEqualityFilter(ulong userId, string tag)
             => Builders<StationTagDto>.Filter.And(
                             Builders<StationTagDto>.Filter.Eq(us => us.UserId, userId),
                             Builders<StationTagDto>.Filter.Eq(us => us.Tag, tag.ToLower()));

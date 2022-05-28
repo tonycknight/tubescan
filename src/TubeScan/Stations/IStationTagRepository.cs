@@ -7,6 +7,7 @@ namespace TubeScan.Stations
         Task SetAsync(ulong userId, StationTag tag);
         Task<StationTag> GetAsync(ulong userId, string tag);
         Task<IList<StationTag>> GetAllAsync(ulong userId);
+        Task RemoveAsync(ulong userId, string tag);
 
     }
 }
