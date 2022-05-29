@@ -27,7 +27,7 @@ namespace TubeScan.DiscordCommands
 
         [Command("tag", RunMode = RunMode.Async)]
         [System.ComponentModel.Description("Set a station name tag. Form: ``tag <tag name> <station name>``.")]
-        public async Task SetStationTagAsyncd(string tagName, [Remainder] string stationNameQuery)
+        public async Task SetStationTagAsync(string tagName, [Remainder] string stationNameQuery)
         {
             try
             {
@@ -47,6 +47,25 @@ namespace TubeScan.DiscordCommands
                 await _tagRepo.SetAsync(authorId, new Models.StationTag(station.Value.NaptanId, tagName));
 
                 ReplyAsync($"Done. Set ``{tagName}`` for ``{station.Value.ShortName}``.");
+            }
+            catch (Exception ex)
+            {
+                ex.ToString().CreateTelemetryEvent(TelemetryEventKind.Error).Send(_telemetry);
+                ReplyAsync(ex.Message);
+            }
+        }
+
+        [Command("-tag", RunMode = RunMode.Async)]
+        [System.ComponentModel.Description("Remove a station name tag. Form: ``-tag <tag name>``.")]
+        public async Task RemoveStationTagAsyncd(string tagName)
+        {
+            try
+            {
+                var authorId = Context.GetAuthorId();
+
+                var deleted = await _tagRepo.RemoveAsync(authorId, tagName);
+                
+                ReplyAsync(deleted ? "Done." : "The tag was not found.");
             }
             catch (Exception ex)
             {

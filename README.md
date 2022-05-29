@@ -6,6 +6,7 @@ A Discord bot for TfL tube data
 # Features
 
 * Get overall lines' status
+
 * Get a station's crowding and arrival information
 
 A full description is [here](./docs/bot_actions.md).

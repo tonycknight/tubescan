@@ -70,7 +70,7 @@ namespace TubeScan.Lines
         private static HealthStatus ToLineHealthStatus(string description) 
             => description switch
             {
-                "Good Service" => HealthStatus.Ok,
+                "Good Service" => HealthStatus.GoodService,
                 "Severe Delays" => HealthStatus.SevereDelays,
                 "Minor Delays" => HealthStatus.PartialService,
                 "Part Suspended" => HealthStatus.PartialService,
