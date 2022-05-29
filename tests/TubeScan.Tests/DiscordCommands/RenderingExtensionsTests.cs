@@ -241,7 +241,7 @@ namespace TubeScan.Tests.DiscordCommands
             }
             else
             {
-                var expected = lines.Select(l => $"**{l.Name}**: ***{tflHealth}***").Join(Environment.NewLine);
+                var expected = lines.Select(l => $"**{l.Name}**: :warning: ***{tflHealth}***").Join(Environment.NewLine);
                 result.Should().Be(expected);
             }
         }
