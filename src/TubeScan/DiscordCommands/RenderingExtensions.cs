@@ -137,13 +137,10 @@ namespace TubeScan.DiscordCommands
 
         private static string GetLineStatus(this Models.LineHealthStatus status)
         {            
-            var text = status.TflHealth;
-
-            var formattedText = status.Health switch                
-                {
-                    Models.HealthStatus.GoodService => text,
-                    _ => $"***{text}***",
-                };
+            
+            var formattedText = status.Health == Models.HealthStatus.GoodService 
+                                    ? status.TflHealth 
+                                    : $"***{status.TflHealth}***";
 
             var emoji = status.Health switch
             {
