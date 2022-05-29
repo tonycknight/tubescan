@@ -146,8 +146,8 @@ namespace TubeScan.DiscordCommands
                 Models.HealthStatus.SevereDelays => $"*** :warning: {text}***",
                 Models.HealthStatus.PartialService => $"*** :boom: {text}***",
                 Models.HealthStatus.NoService => $"*** :boom: {text}***",
-                Models.HealthStatus.Unknown => $"*** :question: {text}***",
-                _ => $"*** :question: {text}***",
+                Models.HealthStatus.Unknown => $"*** :warning: {text}***",
+                _ => $"*** :warning: {text}***",
             };
         }
     }

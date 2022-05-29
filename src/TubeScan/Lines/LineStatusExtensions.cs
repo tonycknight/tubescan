@@ -74,6 +74,7 @@ namespace TubeScan.Lines
                 "Severe Delays" => HealthStatus.SevereDelays,
                 "Minor Delays" => HealthStatus.MinorDelays,
                 "Part Suspended" => HealthStatus.PartialService,
+                "Suspended" => HealthStatus.PartialService,
                 "Part Closure" => HealthStatus.PartialService,
                 "Special Service" => HealthStatus.PartialService,
                 "Service Closed" => HealthStatus.NoService,
