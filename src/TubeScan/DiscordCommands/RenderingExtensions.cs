@@ -148,10 +148,10 @@ namespace TubeScan.DiscordCommands
             var emoji = status.Health switch
             {
                 Models.HealthStatus.GoodService => "",
-                Models.HealthStatus.MinorDelays => ":exclamation:",
-                Models.HealthStatus.SevereDelays => ":warning:",
+                Models.HealthStatus.MinorDelays => ":warning:",
+                Models.HealthStatus.SevereDelays => ":fire:",
                 Models.HealthStatus.PartialService => ":boom:",
-                Models.HealthStatus.NoService => ":boom:",
+                Models.HealthStatus.NoService => ":no_entry:",
                 Models.HealthStatus.Unknown => ":warning:",
                 _ => ":warning:",
             };
