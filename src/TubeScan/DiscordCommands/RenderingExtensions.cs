@@ -139,16 +139,24 @@ namespace TubeScan.DiscordCommands
         {            
             var text = status.TflHealth;
 
-            return status.Health switch
-            {                
-                Models.HealthStatus.GoodService => text,
-                Models.HealthStatus.MinorDelays => $"*** :exclamation: {text}***",
-                Models.HealthStatus.SevereDelays => $"*** :warning: {text}***",
-                Models.HealthStatus.PartialService => $"*** :boom: {text}***",
-                Models.HealthStatus.NoService => $"*** :boom: {text}***",
-                Models.HealthStatus.Unknown => $"*** :warning: {text}***",
-                _ => $"*** :warning: {text}***",
+            var formattedText = status.Health switch                
+                {
+                    Models.HealthStatus.GoodService => text,
+                    _ => $"***{text}***",
+                };
+
+            var emoji = status.Health switch
+            {
+                Models.HealthStatus.GoodService => "",
+                Models.HealthStatus.MinorDelays => ":exclamation:",
+                Models.HealthStatus.SevereDelays => ":warning:",
+                Models.HealthStatus.PartialService => ":boom:",
+                Models.HealthStatus.NoService => ":boom:",
+                Models.HealthStatus.Unknown => ":warning:",
+                _ => ":warning:",
             };
+
+            return $"{emoji} {formattedText}";
         }
     }
 }
