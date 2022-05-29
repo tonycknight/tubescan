@@ -57,14 +57,14 @@ namespace TubeScan.Lines
                 var userIds = users.Select(u => u.Id);
                 var discordUsers = await _discordProxy.GetUsersAsync(userIds);
 
-                $"Broadcasting to {users.Count} users...".CreateTelemetryEvent().Send(_telemetry);
+                $"Broadcasting to {users.Count} user(s)...".CreateTelemetryEvent().Send(_telemetry);
                 foreach (var newStatus in newStatuses)
                 {
                     var line = lines.GetOrDefault(newStatus.Key);
                     await BroadcastLineStatusAsync(discordUsers, line, newStatus.Value);
                 }
             }
-            $"Broadcasted to {users.Count} users.".CreateTelemetryEvent().Send(_telemetry);
+            $"Broadcasted to {users.Count} user(s).".CreateTelemetryEvent().Send(_telemetry);
         }
 
         private async Task BroadcastLineStatusAsync(IEnumerable<Discord.IUser> users, Line line, LineStatus lineStatus)
