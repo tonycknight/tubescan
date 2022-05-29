@@ -72,11 +72,12 @@ namespace TubeScan.Lines
             {
                 "Good Service" => HealthStatus.GoodService,
                 "Severe Delays" => HealthStatus.SevereDelays,
-                "Minor Delays" => HealthStatus.PartialService,
+                "Minor Delays" => HealthStatus.MinorDelays,
                 "Part Suspended" => HealthStatus.PartialService,
                 "Part Closure" => HealthStatus.PartialService,
                 "Special Service" => HealthStatus.PartialService,
                 "Service Closed" => HealthStatus.NoService,
+                "Planned Closure" => HealthStatus.NoService,
                 _ => HealthStatus.Unknown
             };
     }

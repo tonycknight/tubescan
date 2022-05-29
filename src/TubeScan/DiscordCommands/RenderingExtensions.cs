@@ -116,16 +116,14 @@ namespace TubeScan.DiscordCommands
         }
 
         private static IEnumerable<string> GetLineStatus(string header, Models.LineStatus status, bool fullDetails)
-        {
-            var healthStatus = (Models.LineHealthStatus s) => $"***{s.TflHealth}***";
-
+        {            
             if (status.HealthStatuses.Count > 1)
             {
                 yield return header;
             }
             foreach (var s in status.HealthStatuses)
             {
-                yield return status.HealthStatuses.Count > 1 ? healthStatus(s) : $"{header}: {healthStatus(s)}";
+                yield return status.HealthStatuses.Count > 1 ? GetLineStatus(s) : $"{header}: {GetLineStatus(s)}";
                 if (!string.IsNullOrEmpty(s.Description))
                 {
                     yield return $"> {s.Description}";
@@ -135,6 +133,22 @@ namespace TubeScan.DiscordCommands
                     yield return $"> **Affected stations**: {s.AffectedStations.Select(s => $"``{s.ShortName}``").Join(", ")}";
                 }
             }
+        }
+
+        private static string GetLineStatus(this Models.LineHealthStatus status)
+        {            
+            var text = status.TflHealth;
+
+            return status.Health switch
+            {                
+                Models.HealthStatus.GoodService => text,
+                Models.HealthStatus.MinorDelays => $"*** :exclamation: {text}***",
+                Models.HealthStatus.SevereDelays => $"*** :warning: {text}***",
+                Models.HealthStatus.PartialService => $"*** :boom: {text}***",
+                Models.HealthStatus.NoService => $"*** :boom: {text}***",
+                Models.HealthStatus.Unknown => $"*** :question: {text}***",
+                _ => $"*** :question: {text}***",
+            };
         }
     }
 }

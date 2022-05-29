@@ -4,6 +4,7 @@
     {
         Unknown,
         GoodService,
+        MinorDelays,
         PartialService,
         SevereDelays,
         NoService
