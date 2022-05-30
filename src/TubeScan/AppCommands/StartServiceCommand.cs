@@ -50,7 +50,9 @@ namespace TubeScan.AppCommands
             "Started client.".CreateTelemetryEvent().Send(_telemetry);
 
             "Starting job scheduler...".CreateTelemetryEvent().Send(_telemetry);
-            _jobScheduler.Register(GetJobSchedules());
+            var jobs = GetJobSchedules().ToList();
+            $"Found {jobs.Count} job(s)".CreateTelemetryEvent().Send(_telemetry);
+            _jobScheduler.Register(jobs);
             _jobScheduler.Start();
             "Finished job scheduler.".CreateTelemetryEvent().Send(_telemetry);
 

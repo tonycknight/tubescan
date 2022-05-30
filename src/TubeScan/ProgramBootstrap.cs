@@ -21,13 +21,14 @@ namespace TubeScan
                 .AddSingleton<Config.EnvVarAppConfigurationProvider>()
                 .AddSingleton<Config.IAppConfigurationProvider, Config.AppConfigurationProvider>()
                 .AddSingleton<Tfl.ITflClient, Tfl.TflHttpClient>()
-                .AddSingleton<Lines.ILineProvider, Lines.TflLineProvider>()
-                .AddSingleton<Stations.IStationProvider, Stations.StationProvider>()
+                .AddSingleton<Lines.ILineProvider, Lines.TflLineProvider>()                
                 .AddSingleton<Stations.TflStationProvider, Stations.TflStationProvider>()
+                .AddSingleton<Stations.IStationProvider, Stations.StationProvider>()
                 .AddSingleton<Stations.IStationTagRepository, Stations.MongoStationTagRepository>()
                 .AddSingleton<Users.IUsersRepository, Users.MongoUsersRepository>()
                 .AddSingleton<Scheduling.IJobScheduler, Scheduling.JobScheduler>()
-                .AddSingleton<Lines.LineStatusPollingJob>();
+                .AddSingleton<Lines.LineStatusPollingJob>()
+                .AddSingleton<Stations.StationCacheRefreshJob>();
 
             var rateLimit = Policy.RateLimitAsync<HttpResponseMessage>(500, TimeSpan.FromMinutes(1), 20);
             
