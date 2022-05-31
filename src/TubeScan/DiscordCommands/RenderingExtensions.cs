@@ -6,6 +6,8 @@ namespace TubeScan.DiscordCommands
 {
     internal static class RenderingExtensions
     {
+        public const string Thinking = ":thinking: *Thinking...*";
+
         public static string RenderStationTags(this IEnumerable<Models.StationTag> tags, IEnumerable<Models.Station> stations)
         {
             var stationsLookup = stations.ToDictionary(s => s.NaptanId, s => s, StringComparer.InvariantCultureIgnoreCase);

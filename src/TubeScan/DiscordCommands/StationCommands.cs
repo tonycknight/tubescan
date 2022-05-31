@@ -32,21 +32,27 @@ namespace TubeScan.DiscordCommands
             try
             {
                 var authorId = Context.GetAuthorId();
-                
+
+                var responseMsg = await ReplyAsync(RenderingExtensions.Thinking);
+                var responseText = "";
+
                 var stations = await _stationProvider.GetStationsAsync();
 
                 var matches = stations.Match(stationNameQuery, s => s.ShortName).ToList();
                 if (!matches.Any())
                 {
-                    ReplyAsync("None found.");
-                    return;
+                    responseText = "None found.";
                 }
+                else
+                {
+                    var station = matches.First();
 
-                var station = matches.First();
+                    await _tagRepo.SetAsync(authorId, new Models.StationTag(station.Value.NaptanId, tagName));
 
-                await _tagRepo.SetAsync(authorId, new Models.StationTag(station.Value.NaptanId, tagName));
+                    responseText = $"Done. Tag ``{tagName}`` set for ``{station.Value.ShortName}``.";
 
-                ReplyAsync($"Done. Set ``{tagName}`` for ``{station.Value.ShortName}``.");
+                }
+                responseMsg.ModifyAsync(mp => { mp.Content = responseText; });
             }
             catch (Exception ex)
             {
@@ -63,9 +69,13 @@ namespace TubeScan.DiscordCommands
             {
                 var authorId = Context.GetAuthorId();
 
+                var responseMsg = await ReplyAsync(RenderingExtensions.Thinking);
+
                 var deleted = await _tagRepo.RemoveAsync(authorId, tagName);
                 
-                ReplyAsync(deleted ? "Done." : "The tag was not found.");
+                var responseText = deleted ? "Done." : "The tag was not found.";
+
+                responseMsg.ModifyAsync(mp => { mp.Content = responseText; });
             }
             catch (Exception ex)
             {
@@ -81,19 +91,22 @@ namespace TubeScan.DiscordCommands
             try
             {
                 var authorId = Context.GetAuthorId();
-                
+
+                var responseMsg = await ReplyAsync(RenderingExtensions.Thinking);
+                var responseText = "";
+
                 var tags = await _tagRepo.GetAllAsync(authorId);
-                if(tags.Count == 0)
+                if (tags.Count == 0)
                 {
-                    ReplyAsync("None found.");
+                    responseText = "No tags found.";
                 }
+                else
+                {
+                    var stations = (await _stationProvider.GetStationsAsync());
 
-                var stations = (await _stationProvider.GetStationsAsync());
-
-                var msg = tags.RenderStationTags(stations);
-
-                ReplyAsync(msg);
-
+                    responseText = tags.RenderStationTags(stations);
+                }
+                responseMsg.ModifyAsync(mp => { mp.Content = responseText; });                
             }
             catch (Exception ex)
             {
@@ -109,10 +122,8 @@ namespace TubeScan.DiscordCommands
         {
             try
             {
-                var responseMsg = await ReplyAsync(":thinking: *Thinking...*");
-
                 var authorId = Context.GetAuthorId();
-
+                var responseMsg = await ReplyAsync(RenderingExtensions.Thinking);
                 var stationTag = await _tagRepo.GetAsync(authorId, tag);
 
                 if(stationTag == null)
