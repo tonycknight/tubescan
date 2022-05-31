@@ -2,6 +2,15 @@
 
 namespace TubeScan.Stations
 {
+    internal class TflStationLine
+    {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+    }
+
     internal class TflStation
     {
         [JsonProperty("naptanId")]
@@ -9,7 +18,11 @@ namespace TubeScan.Stations
 
         [JsonProperty("commonName")]
         public string CommonName { get; set; }
+
+        [JsonProperty("lines")]
+        public TflStationLine[] Lines { get; set; }
     }
+
 
     internal class TflDayOfWeekStationCrowding
     {
