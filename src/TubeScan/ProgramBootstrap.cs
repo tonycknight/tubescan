@@ -21,13 +21,17 @@ namespace TubeScan
                 .AddSingleton<Config.EnvVarAppConfigurationProvider>()
                 .AddSingleton<Config.IAppConfigurationProvider, Config.AppConfigurationProvider>()
                 .AddSingleton<Tfl.ITflClient, Tfl.TflHttpClient>()
-                .AddSingleton<Lines.ILineProvider, Lines.TflLineProvider>()
-                .AddSingleton<Stations.IStationProvider, Stations.StationProvider>()
+                .AddSingleton<Lines.ILineReferenceProvider, Lines.LineReferenceProvider>()
+                .AddSingleton<Lines.ILineStatusProvider, Lines.TflLineStatusProvider>()
+                .AddSingleton<Lines.ILineProvider, Lines.LineProvider>()
                 .AddSingleton<Stations.TflStationProvider, Stations.TflStationProvider>()
+                .AddSingleton<Stations.IStationProvider, Stations.StationProvider>()
+                .AddSingleton<ISettable<Models.Station>>( sp => (ISettable<Models.Station>)sp.GetService<Stations.IStationProvider>())
                 .AddSingleton<Stations.IStationTagRepository, Stations.MongoStationTagRepository>()
                 .AddSingleton<Users.IUsersRepository, Users.MongoUsersRepository>()
                 .AddSingleton<Scheduling.IJobScheduler, Scheduling.JobScheduler>()
-                .AddSingleton<Lines.LineStatusPollingJob>();
+                .AddSingleton<Lines.LineStatusPollingJob>()
+                .AddSingleton<Stations.StationCacheRefreshJob>();
 
             var rateLimit = Policy.RateLimitAsync<HttpResponseMessage>(500, TimeSpan.FromMinutes(1), 20);
             

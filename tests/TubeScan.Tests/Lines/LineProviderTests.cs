@@ -1,48 +1,65 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
+using NSubstitute;
 using TubeScan.Lines;
 using TubeScan.Models;
 using Xunit;
+using Tk.Extensions.Tasks;
+
 
 namespace TubeScan.Tests.Lines
 {
 
     public class LineProviderTests
     {
-        internal class StubLineProvider : LineProvider
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(3)]
+        public async Task GetLinesAsync_ReturnsLines(int count)
         {
-            public override Task<IList<LineStatus>> GetLineStatusAsync() => throw new NotImplementedException();
+            var lines = GetLines(count);
+
+            var linesProvider = Substitute.For<ILineReferenceProvider>();
+            linesProvider.GetLines().Returns(lines);
+
+            var lineStatusProvider = Substitute.For<ILineStatusProvider>();
+
+            var lp = new LineProvider(linesProvider, lineStatusProvider);
+
+            var result = await lp.GetLinesAsync();
+
+            result.Should().BeEquivalentTo(lines);
         }
 
-        [Fact]
-        public async Task GetLinesAsync_SetReturned()
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(3)]
+        public async Task GetLineStatusAsync(int count)
         {
-            var p = new StubLineProvider();
+            var lines = GetLines(count);
+            var xs = Enumerable.Range(0, count)
+                .Select(i => new LineStatus())
+                .ToList() as IList<LineStatus>;
 
-            var r = await p.GetLinesAsync();
+            var linesProvider = Substitute.For<ILineReferenceProvider>();
+            linesProvider.GetLines().Returns(lines);
 
-            r.Should().NotBeEmpty();
+            var lineStatusProvider = Substitute.For<ILineStatusProvider>();
+            lineStatusProvider.GetLineStatusAsync().Returns(xs.ToTaskResult());
+
+            var result = await lineStatusProvider.GetLineStatusAsync();
+
+            result.Should().BeEquivalentTo(xs);
         }
 
-        [Fact]
-        public async Task GetLinesAsync_ObjectsPopulated()
-        {
-            var p = new StubLineProvider();
-
-            var r = await p.GetLinesAsync();
-
-            Func<Line, bool> isPopulated = s =>
-            {
-                s.Id.Should().NotBeNullOrEmpty();
-                s.Name.Should().NotBeNullOrEmpty();
-                s.Colour.Should().NotBeNullOrEmpty();
-                return true;
-            };
-
-            r.All(isPopulated).Should().BeTrue();
-        }
+        private IList<Line> GetLines(int count)
+            => Enumerable.Range(0, count)
+                .Select(i => new Line(i.ToString(), $"Line {i}", ""))
+                .ToList();
     }
 }

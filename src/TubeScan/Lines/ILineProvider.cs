@@ -2,9 +2,8 @@
 
 namespace TubeScan.Lines
 {
-    internal interface ILineProvider
+    internal interface ILineProvider : ILineStatusProvider
     {
         Task<IList<Line>> GetLinesAsync();
-        Task<IList<LineStatus>> GetLineStatusAsync();
     }
 }

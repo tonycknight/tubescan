@@ -1,31 +1,21 @@
-﻿using TubeScan.Models;
+﻿using Tk.Extensions.Tasks;
+using TubeScan.Models;
 
 namespace TubeScan.Lines
 {
-    internal abstract class LineProvider : ILineProvider
+    internal class LineProvider : ILineProvider
     {
-        private IList<Line> _lines;
+        private readonly ILineReferenceProvider _linesProvider;
+        private readonly ILineStatusProvider _lineStatusProvider;
 
-        public LineProvider()
-        {
-            _lines = new Line[]
-            {
-                new Line("piccadilly", "Piccadilly", "#0019A8"),
-                new Line("bakerloo", "Bakerloo", "#B26313"),
-                new Line("central", "Central", "#DC241F"),
-                new Line("circle", "Circle", "#FFD329"),
-                new Line("district", "District", "#007D32"),
-                new Line("hammersmith-city", "Hammersmith & City", "#F4A9BE"),
-                new Line("jubilee", "Jubilee", "#A1A5A7"),
-                new Line("metropolitan", "Metropolitan", "#9B0058"),
-                new Line("northern", "Northern", "#000000"),
-                new Line("victoria", "Victoria", "#0098D8"),
-                new Line("waterloo-city", "Waterloo & City", "#93CEBA")
-            };
+        public LineProvider(ILineReferenceProvider linesProvider, ILineStatusProvider lineStatusProvider)
+        {            
+            _linesProvider = linesProvider;
+            _lineStatusProvider = lineStatusProvider;
         }
 
-        public Task<IList<Line>> GetLinesAsync() => Task.FromResult(_lines);
+        public Task<IList<Line>> GetLinesAsync() => _linesProvider.GetLines().ToTaskResult();
 
-        public abstract Task<IList<LineStatus>> GetLineStatusAsync();
+        public Task<IList<LineStatus>> GetLineStatusAsync() => _lineStatusProvider.GetLineStatusAsync();
     }
 }

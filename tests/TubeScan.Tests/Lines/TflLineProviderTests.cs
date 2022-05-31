@@ -23,7 +23,7 @@ namespace TubeScan.Tests.Lines
             var tfl = Substitute.For<ITflClient>();
             tfl.GetAsync(Arg.Is<string>(s => s.Length > 0), false).Returns(Task.FromResult(tflResp));
 
-            var p = new TflLineProvider(tfl);
+            var p = new TflLineStatusProvider(tfl);
 
 
             Func<Task<IList<Models.LineStatus>?>> f = async () => await p.GetLineStatusAsync();
@@ -45,7 +45,7 @@ namespace TubeScan.Tests.Lines
             var tfl = Substitute.For<ITflClient>();
             tfl.GetAsync(Arg.Any<string>(), false).Returns(Task.FromResult(tflResp));
 
-            var p = new TflLineProvider(tfl);
+            var p = new TflLineStatusProvider(tfl);
 
             var result = await p.GetLineStatusAsync();
             result.Should().HaveCount(expectedCount);
@@ -66,7 +66,7 @@ namespace TubeScan.Tests.Lines
             var tfl = Substitute.For<ITflClient>();
             tfl.GetAsync(Arg.Any<string>(), false).Returns(Task.FromResult(tflResp));
 
-            var p = new TflLineProvider(tfl);
+            var p = new TflLineStatusProvider(tfl);
 
             Func<Task<IList<Models.LineStatus>?>> f = async () => await p.GetLineStatusAsync();
 

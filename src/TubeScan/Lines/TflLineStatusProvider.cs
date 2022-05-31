@@ -1,18 +1,19 @@
-﻿using TubeScan.Models;
+﻿using Tk.Extensions.Tasks;
+using TubeScan.Models;
 using TubeScan.Tfl;
 
 namespace TubeScan.Lines
 {
-    internal class TflLineProvider : LineProvider
+    internal class TflLineStatusProvider : ILineStatusProvider
     {
         private readonly ITflClient _tflClient;
-
-        public TflLineProvider(ITflClient tflClient)
+        
+        public TflLineStatusProvider(ITflClient tflClient)
         {
             _tflClient = tflClient;
         }
 
-        public override async Task<IList<LineStatus>> GetLineStatusAsync()
+        public async Task<IList<LineStatus>> GetLineStatusAsync()
         {
             var resp = await _tflClient.GetAsync("Line/Mode/tube/Status?detail=true", false);
             if (!resp.IsSuccess)

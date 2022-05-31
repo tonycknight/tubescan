@@ -17,13 +17,13 @@ namespace TubeScan.DiscordCommands
             _lineProvider = lineProvider;
         }
                 
-        [Command("lines", RunMode = RunMode.Async)]
+        [Command("lines", ignoreExtraArgs: true, RunMode = RunMode.Async)]
         [System.ComponentModel.Description("Show line status")]
         public async Task ShowLineStatusAsync()
         {
             try
             {
-                var responseMsg = await ReplyAsync(":thinking: *Thinking...*");
+                var responseMsg = await ReplyAsync(RenderingExtensions.Thinking);
                 
                 var lines = await _lineProvider.GetLinesAsync();
                 var statuses = await _lineProvider.GetLineStatusAsync();

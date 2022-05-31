@@ -18,7 +18,7 @@ namespace TubeScan.DiscordCommands
             _telemetry = telemetry;
         }
 
-        [Command("about", RunMode = RunMode.Async)]
+        [Command("about", ignoreExtraArgs:true, RunMode = RunMode.Async)]
         [System.ComponentModel.Description("About this bot")]
         public Task ShowAboutAsync()
         {
@@ -51,7 +51,7 @@ namespace TubeScan.DiscordCommands
             }
         }
 
-        [Command(HelpCommand, RunMode = RunMode.Async)]
+        [Command(HelpCommand, ignoreExtraArgs: true, RunMode = RunMode.Async)]
         public Task ShowHelpAsync()
         {
             try

@@ -18,7 +18,7 @@ namespace TubeScan.DiscordCommands
             _usersRepo = usersRepo;
         }
 
-        [Command("start", RunMode = RunMode.Async)]
+        [Command("start", ignoreExtraArgs: true, RunMode = RunMode.Async)]
         [System.ComponentModel.Description("Start a private conversation with the bot.")]
         public async Task StartConversationCommand()
         {
