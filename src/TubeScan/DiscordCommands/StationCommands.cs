@@ -145,13 +145,17 @@ namespace TubeScan.DiscordCommands
                     return;
                 }
                                 
-                var status = await _stationProvider.GetStationStatusAsync(station.NaptanId);
+                var stationStatus = await _stationProvider.GetStationStatusAsync(station.NaptanId);
+
+                var allLinesStatuses = await _lineProvider.GetLineStatusAsync();
+                var stationLineIds = station.Lines.Select(sl => sl.Id).ToHashSet();
+                var lineStatuses = allLinesStatuses.Where(ls => stationLineIds.Contains(ls.Id)).ToList();
 
                 var lines = await _lineProvider.GetLinesAsync();
                 Func<string, string> lineName = id => lines.FirstOrDefault(l => StringComparer.InvariantCultureIgnoreCase.Equals(l.Id, id))?.Name;
                 Func<string, string> stationName = id => stations.FirstOrDefault(s => StringComparer.InvariantCultureIgnoreCase.Equals(s.NaptanId, id))?.ShortName;
 
-                var eb = station.RenderStationStatus(status, lineName, stationName);
+                var eb = station.RenderStationStatus(stationStatus, lineName, lineStatuses, stationName);
                 responseMsg.ModifyAsync(mp =>
                 {
                     mp.Content = "";
