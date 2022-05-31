@@ -17,7 +17,7 @@ namespace TubeScan.DiscordCommands
             _lineProvider = lineProvider;
         }
                 
-        [Command("lines", RunMode = RunMode.Async)]
+        [Command("lines", ignoreExtraArgs: true, RunMode = RunMode.Async)]
         [System.ComponentModel.Description("Show line status")]
         public async Task ShowLineStatusAsync()
         {

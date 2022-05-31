@@ -84,7 +84,7 @@ namespace TubeScan.DiscordCommands
             }
         }
 
-        [Command("tags", RunMode = RunMode.Async)]
+        [Command("tags", ignoreExtraArgs: true, RunMode = RunMode.Async)]
         [System.ComponentModel.Description("List all your tags")]
         public async Task GetStationTagsAsync()
         {
