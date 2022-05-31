@@ -14,14 +14,21 @@ namespace TubeScan.Lines
     {
         private readonly ITelemetry _telemetry;
         private readonly IDiscordProxy _discordProxy;
-        private readonly ILineProvider _lineProvider;
+        private readonly ISettable<LineStatus> _lineSettable;
+        private readonly ILineReferenceProvider _lineReferenceProvider;
+        private readonly ILineStatusProvider _lineProvider;
         private readonly IUsersRepository _usersRepo;
         private IList<LineStatus>? _lastKnownLineStatuses;
 
-        public LineStatusPollingJob(ITelemetry telemetry, IDiscordProxy discordProxy, ILineProvider lineProvider, IUsersRepository usersRepo)
+        public LineStatusPollingJob(ITelemetry telemetry, IDiscordProxy discordProxy,
+                                    ISettable<Models.LineStatus> lineSettable,     
+                                    ILineReferenceProvider lineReferenceProvider,
+                                    ILineStatusProvider lineProvider, IUsersRepository usersRepo)
         {
             _telemetry = telemetry;
             _discordProxy = discordProxy;
+            _lineSettable = lineSettable;
+            _lineReferenceProvider = lineReferenceProvider;
             _lineProvider = lineProvider;
             _usersRepo = usersRepo;
         }
@@ -36,14 +43,14 @@ namespace TubeScan.Lines
 
             if (_lastKnownLineStatuses != null && newLineStatuses.NullToEmpty().Any())
             {                
-                var lines = (await _lineProvider.GetLinesAsync()).NullToEmpty().ToDictionary(s => s.Id);
+                var lines = _lineReferenceProvider.GetLines().NullToEmpty().ToDictionary(s => s.Id);
                 var newStatuses = _lastKnownLineStatuses.GetDeltas(newLineStatuses).ToDictionary(s => s.Id);
                 if (newStatuses.Any())
-                {
+                {                    
                     await BroadcastToUsersAsync(lines, newStatuses);
                 }
             }
-
+            _lineSettable.Set(newLineStatuses);
             _lastKnownLineStatuses = newLineStatuses;
         }
 
