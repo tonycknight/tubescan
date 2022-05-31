@@ -21,6 +21,7 @@ namespace TubeScan
                 .AddSingleton<Config.EnvVarAppConfigurationProvider>()
                 .AddSingleton<Config.IAppConfigurationProvider, Config.AppConfigurationProvider>()
                 .AddSingleton<Tfl.ITflClient, Tfl.TflHttpClient>()
+                .AddSingleton<Lines.LineReferenceProvider>()
                 .AddSingleton<Lines.ILineProvider, Lines.TflLineProvider>()                
                 .AddSingleton<Stations.TflStationProvider, Stations.TflStationProvider>()
                 .AddSingleton<Stations.IStationProvider, Stations.StationProvider>()
