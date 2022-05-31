@@ -41,7 +41,7 @@ namespace TubeScan.DiscordCommands
                 var matches = stations.Match(stationNameQuery, s => s.ShortName).ToList();
                 if (!matches.Any())
                 {
-                    responseText = "None found.";
+                    responseText = "No station found.";
                 }
                 else
                 {
