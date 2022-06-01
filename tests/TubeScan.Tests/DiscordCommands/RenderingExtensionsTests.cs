@@ -19,7 +19,7 @@ namespace TubeScan.Tests.DiscordCommands
             var station = new Models.Station(naptanId, name);
             var status = new Models.StationStatus(naptanId);
 
-            var result = station.RenderStationStatus(status, x => x, x => x);
+            var result = station.RenderStationStatus(status, x => x, new Models.LineStatus[0], x => x);
 
             result.Should().NotBeNull();
             result.Title.Should().Be(station.ShortName);
@@ -42,7 +42,7 @@ namespace TubeScan.Tests.DiscordCommands
                 }
             };
 
-            var result = station.RenderStationStatus(status, x => x, x => x);
+            var result = station.RenderStationStatus(status, x => x, new Models.LineStatus[0], x => x);
 
             result.Should().NotBeNull();
             result.Title.Should().Be(station.ShortName);
@@ -65,7 +65,7 @@ namespace TubeScan.Tests.DiscordCommands
                 }
             };
 
-            var result = station.RenderStationStatus(status, x => x, x => x);
+            var result = station.RenderStationStatus(status, x => x, new Models.LineStatus[0], x => x);
 
             result.Should().NotBeNull();
             result.Title.Should().Be(station.ShortName);
@@ -88,7 +88,7 @@ namespace TubeScan.Tests.DiscordCommands
                 }
             };
 
-            var result = station.RenderStationStatus(status, x => x, x => x);
+            var result = station.RenderStationStatus(status, x => x, new Models.LineStatus[0], x => x);
 
             result.Should().NotBeNull();
             result.Title.Should().Be(station.ShortName);
@@ -104,7 +104,7 @@ namespace TubeScan.Tests.DiscordCommands
             var station = new Models.Station(naptanId, name);
             var status = new Models.StationStatus(naptanId);
 
-            var result = station.RenderStationStatus(status, x => x, x => x);
+            var result = station.RenderStationStatus(status, x => x, new Models.LineStatus[0], x => x);
 
             result.Should().NotBeNull();
             result.Title.Should().Be(station.ShortName);
@@ -139,7 +139,7 @@ namespace TubeScan.Tests.DiscordCommands
                 Arrivals = arrivals
             };
 
-            var result = station.RenderStationStatus(status, x => lineName, x => stationName);
+            var result = station.RenderStationStatus(status, x => lineName, new Models.LineStatus[0], x => stationName);
 
             var expectedLocations = arrivals.Select(a => a.CurrentLocation);
 

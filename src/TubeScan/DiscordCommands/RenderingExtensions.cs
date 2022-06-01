@@ -21,10 +21,13 @@ namespace TubeScan.DiscordCommands
             }).Join(Environment.NewLine);
         }
 
-        public static Embed RenderStationStatus(this Models.Station station, Models.StationStatus status, Func<string, string> lineName, Func<string, string> stationName)
+        public static Embed RenderStationStatus(this Models.Station station, Models.StationStatus status, 
+                                                    Func<string, string> lineName, 
+                                                    IEnumerable<Models.LineStatus> lineStatus, 
+                                                    Func<string, string> stationName)
         {
             var crowdingLines = status.GetCrowdingLines();
-            var arrivalsLines = status.GetArrivalsLines(lineName, stationName);
+            var arrivalsLines = status.GetArrivalsLines(lineStatus, lineName, stationName);
 
             var lines = crowdingLines.Concat(arrivalsLines).Join(Environment.NewLine);
 
@@ -61,8 +64,10 @@ namespace TubeScan.DiscordCommands
             return lines;
         }
 
-        private static IEnumerable<string> GetArrivalsLines(this Models.StationStatus status, 
-                                                            Func<string, string> lineName, Func<string, string> stationName)
+        private static IEnumerable<string> GetArrivalsLines(this Models.StationStatus status,
+                                                            IEnumerable<Models.LineStatus> lineStatuses,
+                                                            Func<string, string> lineName, 
+                                                            Func<string, string> stationName)
         {
             var lineGroups = status.Arrivals.NullToEmpty()
                                    .GroupBy(a => a.LineId);
@@ -73,7 +78,16 @@ namespace TubeScan.DiscordCommands
 
             foreach(var lineGroup in lineGroups)
             {
-                yield return $"**{lineName(lineGroup.Key) ?? lineGroup.Key}**";
+                var lineStatus = lineStatuses.Where(ls => ls.Id == lineGroup.Key)
+                                             .SelectMany(ls => ls.HealthStatuses.Where(lhs => lhs.Health != Models.HealthStatus.GoodService))
+                                             .FirstOrDefault();
+
+                var lineGroupMsg = $"**{lineName(lineGroup.Key) ?? lineGroup.Key}**";
+                lineGroupMsg = lineStatus != null
+                    ? $"{lineGroupMsg} {lineStatus.GetLineStatus()}" 
+                    : lineGroupMsg;
+
+                yield return lineGroupMsg;
 
                 var trains = lineGroup.Where(t => !string.IsNullOrEmpty(t.VehicleId))
                     .GroupBy(t => t.DestinationId)

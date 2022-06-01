@@ -1,4 +1,5 @@
-﻿using TubeScan.Models;
+﻿using Tk.Extensions;
+using TubeScan.Models;
 
 namespace TubeScan.Stations
 {
@@ -9,8 +10,13 @@ namespace TubeScan.Stations
                                           .Select(ToStation)
                                           .ToList();
 
-        public static Station ToStation(TflStation value) 
-            => new Station(value.NaptanId, value.CommonName);
+        public static Station ToStation(TflStation value)
+        {
+            var lines = value.Lines.NullToEmpty()
+                .Select(tsl => new StationLine(tsl.Id, tsl.Name))
+                .ToList();
+            return new Station(value.NaptanId, value.CommonName, lines);
+        }
 
         public static TflDayOfWeekStationCrowding ToTflDayOfWeekStationCrowding(this string json)
             => Newtonsoft.Json.JsonConvert.DeserializeObject<TflDayOfWeekStationCrowding>(json);
