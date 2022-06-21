@@ -66,49 +66,60 @@ namespace TubeScan.DiscordCommands
 
         private static IEnumerable<string> GetArrivalsLines(this Models.StationStatus status,
                                                             IEnumerable<Models.LineStatus> lineStatuses,
-                                                            Func<string, string> lineName, 
+                                                            Func<string, string> lineName,
                                                             Func<string, string> stationName)
         {
-            var lineGroups = status.Arrivals.NullToEmpty()
-                                   .GroupBy(a => a.LineId);
+            var lineGroups = status.Arrivals.NullToEmpty().GroupBy(a => a.LineId);
+
             if (!lineGroups.Any())
             {
-                yield return "_**No arrivals**_";
-            }
-
-            foreach(var lineGroup in lineGroups)
-            {
-                var lineStatus = lineStatuses.Where(ls => ls.Id == lineGroup.Key)
-                                             .SelectMany(ls => ls.HealthStatuses.Where(lhs => lhs.Health != Models.HealthStatus.GoodService))
-                                             .FirstOrDefault();
-
-                var lineGroupMsg = $"**{lineName(lineGroup.Key) ?? lineGroup.Key}**";
-                lineGroupMsg = lineStatus != null
-                    ? $"{lineGroupMsg} {lineStatus.GetLineStatus()}" 
-                    : lineGroupMsg;
-
-                yield return lineGroupMsg;
-
-                var trains = lineGroup.Where(t => !string.IsNullOrEmpty(t.VehicleId))
-                    .GroupBy(t => t.DestinationId)
-                    .Select(grp => grp.OrderBy(t => t.ExpectedArrival).First())
-                    .OrderBy(t => t.ExpectedArrival);
-                                
-                foreach(var train in trains.Take(5))
+                var lss = lineStatuses.Where(ls => ls.HealthStatuses.Any(lhs => lhs.Health != Models.HealthStatus.GoodService))
+                                      .Select(ls => new { id = ls.Id, health = ls.HealthStatuses.First(lhs => lhs.Health != Models.HealthStatus.GoodService) });
+                foreach (var ls in lss)
                 {
-                    var dest = stationName(train.DestinationId) ?? "Unknown";
+                    var msg = $"**{lineName(ls.id) ?? ls.id}** {ls.health.GetLineStatus()}";
+                    yield return msg;
+                }
 
-                    yield return $"To **{dest}** arriving at **{train.ExpectedArrival.DateTime.ToUkDateTime().ToString("HH:mm:ss")}**";
+                yield return "_**No arrivals**_";
+
+            }
+            else
+            {
+                foreach (var lineGroup in lineGroups)
+                {
+                    var lineStatus = lineStatuses.Where(ls => ls.Id == lineGroup.Key)
+                                                 .SelectMany(ls => ls.HealthStatuses.Where(lhs => lhs.Health != Models.HealthStatus.GoodService))
+                                                 .FirstOrDefault();
+
+                    var lineGroupMsg = $"**{lineName(lineGroup.Key) ?? lineGroup.Key}**";
+                    lineGroupMsg = lineStatus != null
+                        ? $"{lineGroupMsg} {lineStatus.GetLineStatus()}"
+                        : lineGroupMsg;
+
+                    yield return lineGroupMsg;
                     
-                    if (!string.IsNullOrEmpty(train.CurrentLocation))
+                    var trains = lineGroup.Where(t => !string.IsNullOrEmpty(t.VehicleId))
+                        .GroupBy(t => t.DestinationId)
+                        .Select(grp => grp.OrderBy(t => t.ExpectedArrival).First())
+                        .OrderBy(t => t.ExpectedArrival);
+
+                    foreach (var train in trains.Take(5))
                     {
-                        yield return $"> *{train.CurrentLocation}*";
+                        var dest = stationName(train.DestinationId) ?? "Unknown";
+
+                        yield return $"To **{dest}** arriving at **{train.ExpectedArrival.DateTime.ToUkDateTime().ToString("HH:mm:ss")}**";
+
+                        if (!string.IsNullOrEmpty(train.CurrentLocation))
+                        {
+                            yield return $"> *{train.CurrentLocation}*";
+                        }
                     }
                 }
             }
         }
 
-
+        
         private static IEnumerable<string> GetLineStatus(Models.Line line, Models.LineStatus status, bool fullDetails)
         {
             var header = $"**{line.Name}**";
