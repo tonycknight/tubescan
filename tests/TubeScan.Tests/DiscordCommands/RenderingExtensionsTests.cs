@@ -100,11 +100,31 @@ namespace TubeScan.Tests.DiscordCommands
         {
             var naptanId = "naptanId";
             var name = "name";
-            
-            var station = new Models.Station(naptanId, name);
+            var lineId = "line1";
+            var station = new Models.Station(naptanId, name, new[] { new Models.StationLine(lineId, lineId) });
             var status = new Models.StationStatus(naptanId);
+            var lineStatuses = new[] { new Models.LineStatus() { Id = lineId, } };
 
-            var result = station.RenderStationStatus(status, x => x, new Models.LineStatus[0], x => x);
+            var result = station.RenderStationStatus(status, x => x, lineStatuses, x => x);
+
+            result.Should().NotBeNull();
+            result.Title.Should().Be(station.ShortName);
+            result.Description.Should().NotBeNullOrEmpty();
+
+            result.Description.Should().Contain("No arrivals");
+        }
+
+        [Fact]
+        public void RenderStationStatus_NoArrivals_NoLines_PartiallyRendered()
+        {
+            var naptanId = "naptanId";
+            var name = "name";
+            var lineId = "line1";
+            var station = new Models.Station(naptanId, name, new Models.StationLine[0]);
+            var status = new Models.StationStatus(naptanId);
+            var lineStatuses = new[] { new Models.LineStatus() { Id = lineId, } };
+
+            var result = station.RenderStationStatus(status, x => x, lineStatuses, x => x);
 
             result.Should().NotBeNull();
             result.Title.Should().Be(station.ShortName);
@@ -133,13 +153,14 @@ namespace TubeScan.Tests.DiscordCommands
                 .ToArray();
                 
 
-            var station = new Models.Station(naptanId, name);
+            var station = new Models.Station(naptanId, name, new[] { new Models.StationLine(lineId, lineId) });
             var status = new Models.StationStatus(naptanId)
             {                
                 Arrivals = arrivals
             };
+            var lineStatuses = new[] { new Models.LineStatus() { Id = lineId, } };
 
-            var result = station.RenderStationStatus(status, x => lineName, new Models.LineStatus[0], x => stationName);
+            var result = station.RenderStationStatus(status, x => lineName, lineStatuses, x => stationName);
 
             var expectedLocations = arrivals.Select(a => a.CurrentLocation);
 
