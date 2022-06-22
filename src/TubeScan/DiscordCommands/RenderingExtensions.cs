@@ -71,13 +71,14 @@ namespace TubeScan.DiscordCommands
                                                             Func<string, string> lineName,
                                                             Func<string, string> stationName)
         {
-
+            var lineStatusFound = false;
             foreach (var line in station.Lines.NullToEmpty())
             {
                 var ls = lineStatuses.FirstOrDefault(ls => ls.Id == line.Id);
                 if (ls != null)
                 {
-                    var badHealth = ls.HealthStatuses.FirstOrDefault(lhs => lhs.Health != Models.HealthStatus.GoodService);
+                    lineStatusFound = true;
+                    var badHealth = ls.HealthStatuses.NullToEmpty().FirstOrDefault(lhs => lhs.Health != Models.HealthStatus.GoodService);
 
                     var msg = badHealth == null
                         ? $"**{lineName(ls.Id) ?? ls.Id}**"
@@ -110,6 +111,9 @@ namespace TubeScan.DiscordCommands
                     }
                 }
             }
+
+            if(!lineStatusFound)
+                yield return "_**No arrivals**_";
         }
 
         private static IEnumerable<string> GetLineStatus(Models.Line line, Models.LineStatus status, bool fullDetails)
