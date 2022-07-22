@@ -23,11 +23,11 @@ jobs:
         with:
           dotnet-version: "6.0.x"
         
-      - name: dotnet restore
-        run: dotnet restore
-
       - name: dotnet SCA
-        run: dotnet list package --vulnerable --include-transitive
+        run: |
+          dotnet tool restore
+          dotnet restore
+          dotnet list package --vulnerable --include-transitive
 
   build:
     runs-on: ubuntu-latest
