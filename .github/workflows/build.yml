@@ -95,7 +95,6 @@ jobs:
 
   codeql:
     uses: ./.github/workflows/codeql-analysis.yml
-    needs:   [ build ]
 
   build-docker-image:
     runs-on: ubuntu-latest
