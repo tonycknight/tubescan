@@ -120,7 +120,7 @@ jobs:
 
   create-gh-release:
     runs-on: ubuntu-latest
-    needs: [ build-docker-image, codeql ]    
+    needs: [ build-docker-image ]    
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:    
