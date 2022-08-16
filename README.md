@@ -9,7 +9,7 @@ A Discord bot for TfL tube data
 
 * Get a station's crowding and arrival information
 
-A full description is [here](./docs/bot_actions.md).
+A full list of features and commands is [here](./docs/bot_actions.md).
 
 # Getting Started
 
@@ -22,6 +22,11 @@ or
 ``dotnet tool restore``
 
 ``dotnet fake run "build.fsx" -t "All"``
+
+
+## Bot Configuration
+
+Before you start, you'll need to first set up [Mongo database](/docs/mongo.md), obtain a [TfL App key](./docs/tfl.md) and set up a [Discord bot](/docs/discord_config.md).
 
 
 ## Docker image
@@ -43,6 +48,3 @@ docker run -it --rm   -e TubeScan_Discord_DiscordClientId=<Discord bot Client ID
                         ghcr.io/tonycknight/tubescan:<image tag>
 ```
 
-## Bot Configuration
-
-Before you start, you'll need to first set up a [Discord bot](/docs/discord_config.md) and obtain a [TfL App key](./docs/tfl.md).

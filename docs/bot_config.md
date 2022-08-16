@@ -2,8 +2,9 @@
 
 You can configure the bot either through environment variables or a configuration file.
 
+* [One-off TfL configuration](./tfl.md)
 * [Discord Bot configuration](./discord_config.md)
-* [TfL configuration](./tfl.md)
+
 
 ## Environment variables
 
