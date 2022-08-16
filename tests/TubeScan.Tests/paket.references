@@ -6,3 +6,4 @@ Microsoft.NET.Test.Sdk
 FluentAssertions
 NSubstitute
 FsCheck.Xunit
+System.Net.Http
