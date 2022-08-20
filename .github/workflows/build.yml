@@ -120,6 +120,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Set Preview Docker image name
+        run: |
+          echo "docker-image-name=${{ env.docker-image-name }}-preview" >> $GITHUB_ENV
+        if:${{ if: github.ref != 'refs/heads/main' }}
+
       - name: Build docker image
         run: docker build -t ${{ env.docker-image-name }} --build-arg BuildVersion=${{ env.build-version-number }} .
 
