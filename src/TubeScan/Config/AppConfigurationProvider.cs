@@ -3,7 +3,7 @@
 namespace TubeScan.Config
 {
     [ExcludeFromCodeCoverage]
-    internal class AppConfigurationProvider : IAppConfigurationProvider
+    internal class AppConfigurationProvider : IFileAppConfigurationProvider
     {
         private readonly FileAppConfigurationProvider _fileProvider;
         private readonly EnvVarAppConfigurationProvider _envVarProvider;
@@ -25,7 +25,7 @@ namespace TubeScan.Config
             return _envVarProvider.GetAppConfiguration();
         }
 
-        public IAppConfigurationProvider SetFilePath(string filePath)
+        public IFileAppConfigurationProvider SetFilePath(string filePath)
         {
             _filePath = filePath;
             return this;

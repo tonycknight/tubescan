@@ -16,12 +16,12 @@ namespace TubeScan.AppCommands
     {
         private readonly IDiscordProxy _discordProxy;
         private readonly ITelemetry _telemetry;
-        private readonly IAppConfigurationProvider _configProvider;
+        private readonly IFileAppConfigurationProvider _configProvider;
         private readonly IServiceProvider _serviceProvider;
         private readonly IJobScheduler _jobScheduler;
 
-        public StartServiceCommand(IDiscordProxy discordProxy, ITelemetry telemetry, 
-                                    IAppConfigurationProvider configProvider,
+        public StartServiceCommand(IDiscordProxy discordProxy, ITelemetry telemetry,
+                                    IFileAppConfigurationProvider configProvider,
                                     IServiceProvider serviceProvider, IJobScheduler jobScheduler)
         {
             _discordProxy = discordProxy;
