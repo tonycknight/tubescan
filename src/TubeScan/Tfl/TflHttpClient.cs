@@ -18,7 +18,7 @@ namespace TubeScan.Tfl
             _telemetry = telemetry;
             _httpFactory = httpFactory;
             _appKey = new Lazy<string>(() => configProvider.GetAppConfiguration().Tfl.AppKey);
-            _tflDomain = "https://api.tfl.gov.uk";
+            _tflDomain = configProvider.GetAppConfiguration().Tfl.TflUri;
 
 #pragma warning restore CS8601 // Possible null reference assignment.
         }
