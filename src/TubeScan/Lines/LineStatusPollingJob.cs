@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Tk.Extensions;
+using Tk.Extensions.Collections;
+using Tk.Extensions.Linq;
 using TubeScan.DiscordClient;
 using TubeScan.DiscordCommands;
 using TubeScan.Models;

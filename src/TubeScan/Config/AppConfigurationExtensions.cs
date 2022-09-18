@@ -1,4 +1,4 @@
-﻿using Tk.Extensions;
+﻿using Tk.Extensions.Guards;
 
 namespace TubeScan.Config
 {

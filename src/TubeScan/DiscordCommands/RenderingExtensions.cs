@@ -1,5 +1,7 @@
 ﻿using Discord;
 using Tk.Extensions;
+using Tk.Extensions.Linq;
+using Tk.Extensions.Collections;
 using Tk.Extensions.Time;
 
 namespace TubeScan.DiscordCommands

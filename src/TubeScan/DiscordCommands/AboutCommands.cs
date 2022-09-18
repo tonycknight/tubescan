@@ -28,7 +28,7 @@ namespace TubeScan.DiscordCommands
 
                 var msg = new[]
                 {
-                    attrs.GetAttributeValue<AssemblyDescriptionAttribute>(a => a.Description),
+                    attrs.GetAttributeValue<AssemblyDescriptionAttribute, string>(a => a.Description),
                     ""
                 }
                 .Concat(ProgramBootstrap.GetVersionNotices(attrs))
@@ -37,7 +37,7 @@ namespace TubeScan.DiscordCommands
                 .Where(x => x != null).Join(Environment.NewLine);
 
                 var eb = new Discord.EmbedBuilder()
-                                    .WithTitle(attrs.GetAttributeValue<AssemblyProductAttribute>(a => a.Product))
+                                    .WithTitle(attrs.GetAttributeValue<AssemblyProductAttribute, string>(a => a.Product))
                                     .WithUrl("https://github.com/tonycknight/tubescan")
                                     .WithDescription(msg)
                                     .Build();
