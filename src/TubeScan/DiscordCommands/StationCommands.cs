@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Discord.Commands;
+using Tk.Extensions;
 using TubeScan.Lines;
 using TubeScan.Search;
 using TubeScan.Stations;
@@ -170,6 +171,34 @@ namespace TubeScan.DiscordCommands
             }            
         }
 
-
+        [Command("find", RunMode = RunMode.Async)]
+        [System.ComponentModel.Description("Find a station. Form: ``find <station name>``.")]
+        public async Task FindStationAsync([Remainder] string stationNameQuery)
+        {
+            try
+            {                
+                var responseMsg = await ReplyAsync(RenderingExtensions.Thinking);
+                var responseText = "";
+                                
+                var matches = (await _stationProvider.GetStationsAsync())
+                                      .Match(stationNameQuery, s => s.ShortName)                                      
+                                      .Take(5).ToList();
+                if (!matches.Any())
+                {
+                    responseText = "No station found.";
+                }
+                else
+                {
+                    var stationNames = matches.Select(si => $"``{si.Value.ShortName}``");
+                    responseText = $"Found stations:{Environment.NewLine}{stationNames.Join(Environment.NewLine)}";
+                }
+                responseMsg.ModifyAsync(mp => { mp.Content = responseText; });
+            }
+            catch (Exception ex)
+            {
+                ex.ToString().CreateTelemetryEvent(TelemetryEventKind.Error).Send(_telemetry);
+                ReplyAsync(ex.Message);
+            }
+        }
     }
 }
