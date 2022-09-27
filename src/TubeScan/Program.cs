@@ -32,7 +32,7 @@ namespace TubeScan
         private int OnExecute(CommandLineApplication app)
         {
             app.Description = typeof(ProgramBootstrap).Assembly.GetCustomAttributes()
-                                                      .GetAttributeValue<AssemblyProductAttribute>(a => a.Product);
+                                                      .GetAttributeValue<AssemblyProductAttribute, string>(a => a.Product);
             app.ShowHelp();
             return true.ToReturnCode();
         }

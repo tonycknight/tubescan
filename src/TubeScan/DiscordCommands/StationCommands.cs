@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Discord.Commands;
+using Tk.Extensions;
 using TubeScan.Lines;
 using TubeScan.Search;
 using TubeScan.Stations;
@@ -26,6 +27,7 @@ namespace TubeScan.DiscordCommands
         }
 
         [Command("tag", RunMode = RunMode.Async)]
+        [Alias("t")]
         [System.ComponentModel.Description("Set a station name tag. Form: ``tag <tag name> <station name>``.")]
         public async Task SetStationTagAsync(string tagName, [Remainder] string stationNameQuery)
         {
@@ -62,6 +64,7 @@ namespace TubeScan.DiscordCommands
         }
 
         [Command("-tag", RunMode = RunMode.Async)]
+        [Alias("-t")]
         [System.ComponentModel.Description("Remove a station name tag. Form: ``-tag <tag name>``.")]
         public async Task RemoveStationTagAsyncd(string tagName)
         {
@@ -117,32 +120,25 @@ namespace TubeScan.DiscordCommands
 
         [Command("station", RunMode = RunMode.Async)]
         [Alias("stn", "s")]
-        [System.ComponentModel.Description("Get a station's status. Form: ``station <tag>``.")]
-        public async Task GetStationStatusAsync(string tag)
+        [System.ComponentModel.Description("Get a station's status. Form: ``station <tag>|<station name>``.")]
+        public async Task GetStationStatusAsync([Remainder] string name)
         {
             try
             {
                 var authorId = Context.GetAuthorId();
                 var responseMsg = await ReplyAsync(RenderingExtensions.Thinking);
-                var stationTag = await _tagRepo.GetAsync(authorId, tag);
-
-                if(stationTag == null)
-                {
-                    await responseMsg.ModifyAsync(mp =>
-                    {
-                        mp.Content = "Tag not found.";
-                    });
-                    return;
-                }
+                var stationTag = await _tagRepo.GetAsync(authorId, name);
                 var stations = (await _stationProvider.GetStationsAsync());
-                var station = stations.FirstOrDefault(s => s.NaptanId == stationTag.NaptanId);
-                if(station == null)
+
+                var station = stations.FirstOrDefault(s => s.NaptanId == stationTag?.NaptanId)
+                                ?? stations.Match(name, s => s.ShortName).FirstOrDefault().Value;
+                if (station == null)
                 {
                     await responseMsg.ModifyAsync(mp =>
                     {
-                        mp.Content = "Station not found.";
+                        mp.Content = "Station/tag not found.";
                     });
-                    return;
+                    return;                    
                 }
                                 
                 var stationStatus = await _stationProvider.GetStationStatusAsync(station.NaptanId);
@@ -170,6 +166,34 @@ namespace TubeScan.DiscordCommands
             }            
         }
 
-
+        [Command("find", RunMode = RunMode.Async)]
+        [System.ComponentModel.Description("Find a station. Form: ``find <station name>``.")]
+        public async Task FindStationAsync([Remainder] string stationNameQuery)
+        {
+            try
+            {                
+                var responseMsg = await ReplyAsync(RenderingExtensions.Thinking);
+                var responseText = "";
+                                
+                var matches = (await _stationProvider.GetStationsAsync())
+                                      .Match(stationNameQuery, s => s.ShortName)                                      
+                                      .Take(5).ToList();
+                if (!matches.Any())
+                {
+                    responseText = "No station found.";
+                }
+                else
+                {
+                    var stationNames = matches.Select(si => $"``{si.Value.ShortName}``");
+                    responseText = $"Found stations:{Environment.NewLine}{stationNames.Join(Environment.NewLine)}";
+                }
+                responseMsg.ModifyAsync(mp => { mp.Content = responseText; });
+            }
+            catch (Exception ex)
+            {
+                ex.ToString().CreateTelemetryEvent(TelemetryEventKind.Error).Send(_telemetry);
+                ReplyAsync(ex.Message);
+            }
+        }
     }
 }

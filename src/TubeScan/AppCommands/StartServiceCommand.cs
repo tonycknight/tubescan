@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using McMaster.Extensions.CommandLineUtils;
+using Polly;
 using Tk.Extensions;
+using Tk.Extensions.Funcs;
 using Tk.Extensions.Reflection;
 using TubeScan.Config;
 using TubeScan.DiscordClient;
@@ -39,7 +41,7 @@ namespace TubeScan.AppCommands
             var config = GetConfig();
 
             var attrs = typeof(ProgramBootstrap).Assembly.GetCustomAttributes();
-            $"{attrs.GetAttributeValue<AssemblyProductAttribute>(a => a.Product)} {attrs.GetAttributeValue<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion).Format("Version {0}")}"
+            $"{attrs.GetAttributeValue<AssemblyProductAttribute, string>(a => a.Product)} {attrs.GetAttributeValue<AssemblyInformationalVersionAttribute, string>(a => a.InformationalVersion).Format("Version {0}")}"
                 .CreateTelemetryEvent(TelemetryEventKind.Highlight).Send(_telemetry);
 
             "Starting services...".CreateTelemetryEvent().Send(_telemetry);

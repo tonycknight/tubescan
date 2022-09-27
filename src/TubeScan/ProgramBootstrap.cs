@@ -2,9 +2,10 @@
 using Crayon;
 using Microsoft.Extensions.DependencyInjection;
 using Tk.Extensions;
-using Tk.Extensions.Reflection;
+using Tk.Extensions.Linq;
 using Polly;
 using Tk.Extensions.Time;
+using Tk.Extensions.Reflection;
 
 namespace TubeScan
 {
@@ -51,8 +52,8 @@ namespace TubeScan
             return "".Singleton()
                 .Append(new[]
                             {
-                                Output.Bright.Magenta(attrs.GetAttributeValue<AssemblyProductAttribute>(a => a.Product)),
-                                attrs.GetAttributeValue<AssemblyDescriptionAttribute>(a => a.Description),
+                                Output.Bright.Magenta(attrs.GetAttributeValue<AssemblyProductAttribute, string>(a => a.Product)),
+                                attrs.GetAttributeValue<AssemblyDescriptionAttribute, string>(a => a.Description),
                     
                             }.Join(" - "))
                 .Append("")
@@ -64,8 +65,8 @@ namespace TubeScan
 
         public static IEnumerable<string> GetVersionNotices(IEnumerable<Attribute> attrs) => new[]
             {
-                attrs.GetAttributeValue<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion).Format("Version {0} alpha"),
-                attrs.GetAttributeValue<AssemblyCopyrightAttribute>(a => a.Copyright),
+                attrs.GetAttributeValue<AssemblyInformationalVersionAttribute, string>(a => a.InformationalVersion).Format("Version {0} alpha"),
+                attrs.GetAttributeValue<AssemblyCopyrightAttribute, string>(a => a.Copyright),
                 "You can find the repository at https://github.com/tonycknight/tubescan"
             };
 
