@@ -36,7 +36,7 @@ namespace TubeScan.Search
                              .Select(a => a.si);
         }
 
-        public static IEnumerable<SearchInfo<T>> MatchInner<T>(this IEnumerable<T> values,
+        private static IEnumerable<SearchInfo<T>> MatchInner<T>(this IEnumerable<T> values,
                                                           string query, Func<T, string> keySelector)
         {
             var qs = query.Tokenise().Select(StripPunctuation).ToList();

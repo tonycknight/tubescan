@@ -118,32 +118,25 @@ namespace TubeScan.DiscordCommands
 
         [Command("station", RunMode = RunMode.Async)]
         [Alias("stn", "s")]
-        [System.ComponentModel.Description("Get a station's status. Form: ``station <tag>``.")]
-        public async Task GetStationStatusAsync(string tag)
+        [System.ComponentModel.Description("Get a station's status. Form: ``station <tag>|<station name>``.")]
+        public async Task GetStationStatusAsync([Remainder] string name)
         {
             try
             {
                 var authorId = Context.GetAuthorId();
                 var responseMsg = await ReplyAsync(RenderingExtensions.Thinking);
-                var stationTag = await _tagRepo.GetAsync(authorId, tag);
-
-                if(stationTag == null)
-                {
-                    await responseMsg.ModifyAsync(mp =>
-                    {
-                        mp.Content = "Tag not found.";
-                    });
-                    return;
-                }
+                var stationTag = await _tagRepo.GetAsync(authorId, name);
                 var stations = (await _stationProvider.GetStationsAsync());
-                var station = stations.FirstOrDefault(s => s.NaptanId == stationTag.NaptanId);
-                if(station == null)
+
+                var station = stations.FirstOrDefault(s => s.NaptanId == stationTag?.NaptanId)
+                                ?? stations.Match(name, s => s.ShortName).FirstOrDefault().Value;
+                if (station == null)
                 {
                     await responseMsg.ModifyAsync(mp =>
                     {
-                        mp.Content = "Station not found.";
+                        mp.Content = "Station/tag not found.";
                     });
-                    return;
+                    return;                    
                 }
                                 
                 var stationStatus = await _stationProvider.GetStationStatusAsync(station.NaptanId);
