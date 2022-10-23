@@ -118,8 +118,10 @@ namespace TubeScan.DiscordCommands
                                 supplementary.Append(join);
                                 supplementary.Append(wait);                                
                             }
-
-                            yield return $"> *{supplementary.ToString()}*";
+                            if (supplementary.Length > 0)
+                            {
+                                yield return $"> *{supplementary}*";
+                            }
                         }
                     }
                 }
