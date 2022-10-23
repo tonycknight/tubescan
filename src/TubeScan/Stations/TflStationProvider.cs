@@ -95,7 +95,7 @@ namespace TubeScan.Stations
             return match?.PercentageOfBaseLine;
         }
 
-        public async Task<IList<Arrival>> GetStationArrivalsAsync(string naptanId)
+        private async Task<IList<Arrival>> GetStationArrivalsAsync(string naptanId)
         {            
             var path = $"StopPoint/{naptanId}/Arrivals";
             var resp = await _tflClient.GetAsync(path, true);
@@ -107,6 +107,7 @@ namespace TubeScan.Stations
             var serverTime = resp.Headers.GetResponseDate();
 
             return resp.Body.ToArrivals()
+                        .Where(a => !string.IsNullOrEmpty(a.DestinationId))
                         .Select(a => a.ApplyExpectedWait(serverTime))
                         .ToList();
         }
