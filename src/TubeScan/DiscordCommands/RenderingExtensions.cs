@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using System.Text;
+using Discord;
 using Tk.Extensions;
 using Tk.Extensions.Linq;
 using Tk.Extensions.Collections;
@@ -102,12 +103,24 @@ namespace TubeScan.DiscordCommands
                         foreach (var train in trains.Take(5))
                         {
                             var dest = stationName(train.DestinationId) ?? "Unknown";
-
+                            
                             yield return $"To **{dest}** arriving at **{train.ExpectedArrival.DateTime.ToUkDateTime().ToString("HH:mm:ss")}**";
+                                                        
+                            var supplementary = new StringBuilder(train.CurrentLocation);
+                            
+                            var wait = train.ExpectedWait.HasValue
+                                        ? $"**{train.ExpectedWait.Value.Minutes} mins {train.ExpectedWait.Value.Seconds} secs **"
+                                        : "";
 
-                            if (!string.IsNullOrEmpty(train.CurrentLocation))
+                            if (wait.Length > 0)
                             {
-                                yield return $"> *{train.CurrentLocation}*";
+                                var join =  supplementary.Length > 0 ? $", due in " : $"Due in ";
+                                supplementary.Append(join);
+                                supplementary.Append(wait);                                
+                            }
+                            if (supplementary.Length > 0)
+                            {
+                                yield return $"> *{supplementary}*";
                             }
                         }
                     }
