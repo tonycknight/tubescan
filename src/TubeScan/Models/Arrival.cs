@@ -8,5 +8,6 @@
         public string CurrentLocation { get; set; }
         public string ArrivalPlatform { get; set; }
         public DateTimeOffset ExpectedArrival { get; set; }
+        public TimeSpan? ExpectedWait { get; set; }
     }
 }

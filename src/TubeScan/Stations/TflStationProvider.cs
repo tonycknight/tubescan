@@ -104,7 +104,11 @@ namespace TubeScan.Stations
                 throw new ApplicationException($"Bad response from TFL: {resp.HttpStatus} received.");
             }
 
-            return resp.Body.ToArrivals();
+            var serverTime = resp.Headers.GetResponseDate();
+
+            return resp.Body.ToArrivals()
+                        .Select(a => a.ApplyExpectedWait(serverTime))
+                        .ToList();
         }
     }
 }

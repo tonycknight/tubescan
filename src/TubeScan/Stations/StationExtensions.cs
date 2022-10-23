@@ -22,10 +22,9 @@ namespace TubeScan.Stations
             => Newtonsoft.Json.JsonConvert.DeserializeObject<TflDayOfWeekStationCrowding>(json);
 
 
-        public static IList<Arrival> ToArrivals(this string json)
+        public static IEnumerable<Arrival> ToArrivals(this string json)
             => Newtonsoft.Json.JsonConvert.DeserializeObject<TflArrivalPrediction[]>(json)
-                                          .Select(ToArrival)
-                                          .ToList();
+                                          .Select(ToArrival);
 
         public static Arrival ToArrival(TflArrivalPrediction value)
             => new Arrival()
@@ -37,5 +36,32 @@ namespace TubeScan.Stations
                 DestinationId = value.DestinationNaptanId,
                 ExpectedArrival = value.ExpectedArrival,
             };
+
+        public static DateTimeOffset? GetResponseDate(this IDictionary<string, string[]> headers)
+        {
+            if(headers?.TryGetValue("Date", out var values) == true)
+            {
+                var val = values.FirstOrDefault();
+                if(val != null && DateTimeOffset.TryParse(val, out var result))
+                {
+                    return result;
+                }                
+            }
+
+            return default;
+        }
+
+        public static Arrival ApplyExpectedWait(this Arrival value, DateTimeOffset? serverTime)
+        {
+            if(serverTime != default)
+            {
+                var wait = value.ExpectedArrival - serverTime;
+                if (wait >= TimeSpan.Zero)
+                {
+                    value.ExpectedWait = wait;
+                }
+            }
+            return value;
+        }
     }
 }
