@@ -69,10 +69,10 @@ namespace TubeScan.Scheduling
                 Enabled = true,
             };
 
-            timer.Elapsed += (object? sender, System.Timers.ElapsedEventArgs e) =>
+            timer.Elapsed += async (object? sender, System.Timers.ElapsedEventArgs e) =>
             {
                 timer.Stop();
-                var r = ExecuteJob(info).GetAwaiter().GetResult();
+                var r = await ExecuteJob(info);
                 timer.Start();
             };
 

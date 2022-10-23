@@ -53,15 +53,13 @@ namespace TubeScan.Tests.Search
         }
 
         [Property(Verbose = true)]
-        public Property Match_NoMatch_NotFound(NonEmptyString[] values)
+        public Property Match_NoMatch_NotFound(NonEmptyString[] values, Guid query)
         {
             Func<bool> rule = () =>
             {
                 var values2 = values.Select(x => x.Get + x.Get).ToList();
 
-                var query = Guid.NewGuid().ToString();
-
-                var result = values2.Match(query, x => x).Select(si => si.Value).FirstOrDefault();
+                var result = values2.Match(query.ToString(), x => x).Select(si => si.Value).FirstOrDefault();
 
                 return result == default;
             };

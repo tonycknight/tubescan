@@ -43,9 +43,13 @@ namespace TubeScan.Tests.Stations
 
             var sp = new TflStationProvider(tflc, lp, GetTimeProvider(DateTime.UtcNow));
 
-            Action a = () => sp.GetStationsAsync().GetAwaiter().GetResult();
+            var a = async () =>
+            {
+                await sp.GetStationsAsync();
+                return true;
+            };
 
-            a.Should().Throw<ApplicationException>().WithMessage("?*");
+            a.Should().ThrowAsync<ApplicationException>().WithMessage("?*");
         }
 
 
@@ -235,9 +239,13 @@ namespace TubeScan.Tests.Stations
 
             var sp = new TflStationProvider(tflc, lp, GetTimeProvider(now));
 
-            Action a = () => sp.GetStationStatusAsync(naptanId).GetAwaiter().GetResult();
+            var a = async () =>
+            {
+                await sp.GetStationStatusAsync(naptanId);
+                return true;
+            };
 
-            a.Should().Throw<ApplicationException>().WithMessage("?*");            
+            a.Should().ThrowAsync<ApplicationException>().WithMessage("?*");            
         }
 
 
@@ -274,9 +282,14 @@ namespace TubeScan.Tests.Stations
 
             var sp = new TflStationProvider(tflc, lp, GetTimeProvider(now));
 
-            Action a = () => sp.GetStationStatusAsync(naptanId).GetAwaiter().GetResult();
+            var a = async () =>
+            {
+                await sp.GetStationStatusAsync(naptanId);
+                return true;
+            };
+                
 
-            a.Should().Throw<ApplicationException>().WithMessage("?*");
+            a.Should().ThrowAsync<ApplicationException>().WithMessage("?*");
         }
 
         [Theory]
@@ -312,9 +325,14 @@ namespace TubeScan.Tests.Stations
 
             var sp = new TflStationProvider(tflc, lp, GetTimeProvider(now));
 
-            Action a = () => sp.GetStationStatusAsync(naptanId).GetAwaiter().GetResult();
+            var a = async () =>
+            {
+                await sp.GetStationStatusAsync(naptanId);
+                return true;
+            };
 
-            a.Should().Throw<ApplicationException>().WithMessage("?*");
+
+            a.Should().ThrowAsync<ApplicationException>().WithMessage("?*");
         }
 
         private ITimeProvider GetTimeProvider(DateTime now)
