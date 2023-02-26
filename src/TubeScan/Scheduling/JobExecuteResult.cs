@@ -9,7 +9,7 @@
         }
 
         public IJob Job { get; }
-        public TimeSpan Duration { get; }                
+        public TimeSpan Duration { get; }
     }
 
     internal class JobExecuteResultOk : JobExecuteResult

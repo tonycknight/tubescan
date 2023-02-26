@@ -39,7 +39,7 @@ namespace TubeScan.DiscordCommands
                     ReplyAsync($"Check your DMs {Context.GetAuthorMention()}");
                 }
                 else
-                {                    
+                {
                     ReplyAsync(helpMsg);
                 }
 

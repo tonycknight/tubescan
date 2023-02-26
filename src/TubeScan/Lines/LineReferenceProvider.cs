@@ -8,7 +8,7 @@ namespace TubeScan.Lines
 
         public IList<Line> GetLines() => _lines;
 
-        private static IList<Line> CreateLines() 
+        private static IList<Line> CreateLines()
             => new Line[]
                 {
                     new Line("piccadilly", "Piccadilly", "#0019A8"),

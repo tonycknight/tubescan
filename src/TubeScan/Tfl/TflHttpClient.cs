@@ -24,7 +24,7 @@ namespace TubeScan.Tfl
         }
 
         public async Task<TflResponse> GetAsync(string path, bool appendSubKey)
-        {            
+        {
             try
             {
                 $"Sending GET request to TFL: {path}...".CreateTelemetryEvent(TelemetryEventKind.Trace).Send(_telemetry);

@@ -40,7 +40,7 @@ namespace TubeScan.Tests.Config
         [InlineData(3)]
         public void GetAppConfiguration_RandomEnvVars_ReturnsDefaultConfig(int evCount)
         {
-            
+
             var vs = Enumerable.Range(1, evCount).Select(_ => Guid.NewGuid().ToString()).ToList();
             var envvars = new System.Collections.Hashtable(vs.ToDictionary(v => v, v => v));
 
@@ -59,9 +59,9 @@ namespace TubeScan.Tests.Config
             config.Tfl.AppKey.Should().BeNull();
         }
 
-        [Fact]        
+        [Fact]
         public void GetAppConfiguration_EnvVars_ReturnsConfig()
-        {            
+        {
             var envvarData =
                 new Dictionary<string, string>()
                 {
@@ -73,7 +73,7 @@ namespace TubeScan.Tests.Config
                 };
 
             var envvarHs = new System.Collections.Hashtable(envvarData);
-            
+
             var io = Substitute.For<IIoProvider>();
             io.GetEnvironmentVariables().Returns((System.Collections.IDictionary)envvarHs);
 

@@ -12,17 +12,17 @@ namespace TubeScan.Telemetry
         public static TelemetryEvent CreateTelemetryEvent(this string message, TelemetryEventKind kind)
             => TelemetryEvent.Create(kind, message);
 
-        public static string ToKindString(this TelemetryEventKind kind) 
+        public static string ToKindString(this TelemetryEventKind kind)
             => kind switch
-                {
-                    TelemetryEventKind.Error => "ERROR",
-                    TelemetryEventKind.Trace => "TRACE",
-                    TelemetryEventKind.Info => "INFO",
-                    TelemetryEventKind.Warning => "WARN",
-                    _ => ""
-                };
+            {
+                TelemetryEventKind.Error => "ERROR",
+                TelemetryEventKind.Trace => "TRACE",
+                TelemetryEventKind.Info => "INFO",
+                TelemetryEventKind.Warning => "WARN",
+                _ => ""
+            };
 
-        public static string FormatKind(this string msg, TelemetryEventKind kind) 
+        public static string FormatKind(this string msg, TelemetryEventKind kind)
             => msg.Length > 0 ? $"[{msg.Colourise(kind)}]" : msg;
 
         public static string Colourise(this string message, TelemetryEventKind kind)

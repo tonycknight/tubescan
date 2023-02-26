@@ -4,7 +4,7 @@ namespace TubeScan.DiscordCommands
 {
     internal static class CommandExtensions
     {
-        public static bool IsDMChannel(this SocketCommandContext context) 
+        public static bool IsDMChannel(this SocketCommandContext context)
             => (context.Channel as Discord.WebSocket.SocketDMChannel) != null;
 
         public static ulong GetAuthorId(this SocketCommandContext context)

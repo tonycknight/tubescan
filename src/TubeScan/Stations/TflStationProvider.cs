@@ -18,7 +18,7 @@ namespace TubeScan.Stations
             _lineProvider = lineProvider;
             _time = time;
         }
-                
+
         public async Task<IList<Station>> GetStationsAsync()
         {
             var lines = await _lineProvider.GetLinesAsync();
@@ -32,9 +32,9 @@ namespace TubeScan.Stations
         }
 
         public async Task<StationStatus> GetStationStatusAsync(string naptanId)
-        {           
+        {
             var now = _time.UtcNow();
-            
+
             return new StationStatus(naptanId)
             {
                 Crowding = new StationCrowding()
@@ -78,7 +78,7 @@ namespace TubeScan.Stations
 
 
         private async Task<double?> GetAverageStationCrowdingAsync(string naptanId, DateTime now)
-        {                        
+        {
             var path = $"crowding/{naptanId}/{now.DayOfWeek.ToString()[..3]}";
             var resp = await _tflClient.GetAsync(path, true);
             if (!resp.IsSuccess)
@@ -87,16 +87,16 @@ namespace TubeScan.Stations
             }
 
             var result = resp.Body.ToTflDayOfWeekStationCrowding();
-            
+
             var tod = now.TimeOfDay;
-            
+
             var match = result.TimeBands.NullToEmpty().FirstOrDefault(tb => tod >= tb.From && tod < tb.To);
 
             return match?.PercentageOfBaseLine;
         }
 
         private async Task<IList<Arrival>> GetStationArrivalsAsync(string naptanId)
-        {            
+        {
             var path = $"StopPoint/{naptanId}/Arrivals";
             var resp = await _tflClient.GetAsync(path, true);
             if (!resp.IsSuccess)

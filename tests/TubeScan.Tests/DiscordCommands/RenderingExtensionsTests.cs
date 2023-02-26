@@ -151,11 +151,11 @@ namespace TubeScan.Tests.DiscordCommands
                     VehicleId = i.ToString()
                 })
                 .ToArray();
-                
+
 
             var station = new Models.Station(naptanId, name, new[] { new Models.StationLine(lineId, lineId) });
             var status = new Models.StationStatus(naptanId)
-            {                
+            {
                 Arrivals = arrivals
             };
             var lineStatuses = new[] { new Models.LineStatus() { Id = lineId, } };
@@ -186,7 +186,7 @@ namespace TubeScan.Tests.DiscordCommands
         public void RenderStationTags_Rendered(int count)
         {
             var naptans = Enumerable.Range(1, count).Select(x => $"naptan{x}").ToList();
-            var stations = naptans.Select((n,x) => new Models.Station(n, $"station{x}")).ToList();
+            var stations = naptans.Select((n, x) => new Models.Station(n, $"station{x}")).ToList();
             var tags = naptans.Select((n, x) => new Models.StationTag(n, $"tag{x}")).ToList();
 
             var result = tags.RenderStationTags(stations);
@@ -233,11 +233,11 @@ namespace TubeScan.Tests.DiscordCommands
             else
             {
                 var expected = lines.Select(l => $"**{l.Name}**: Unknown").Join(Environment.NewLine);
-                result.Should().Be(expected);                
+                result.Should().Be(expected);
             }
         }
 
-        
+
 
         [Theory]
         [InlineData(0)]
@@ -296,7 +296,7 @@ namespace TubeScan.Tests.DiscordCommands
                 result.Should().BeEmpty();
             }
             else
-            {                
+            {
                 var freqs = result.Split(descr);
                 freqs.Length.Should().Be(count + 1);
 
@@ -312,7 +312,7 @@ namespace TubeScan.Tests.DiscordCommands
         [InlineData(3, 3)]
         [InlineData(3, 4)]
         public void RenderLinesStatus_WithManyStatus_ContainsLineNames(int lineCount, int statusCount)
-        {            
+        {
             var lines = Enumerable.Range(1, lineCount)
                                     .Select(i => new Models.Line(i.ToString(), $"Line{i}", ""))
                                     .ToList();

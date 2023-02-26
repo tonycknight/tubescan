@@ -65,7 +65,7 @@ namespace TubeScan.AppCommands
             var cts = new CancellationTokenSource();
 
             Console.CancelKeyPress += async (object? sender, ConsoleCancelEventArgs e) =>
-            {                
+            {
                 "Shutting down job scheduler...".CreateTelemetryEvent().Send(_telemetry);
                 _jobScheduler.Stop();
                 "Shut down job scheduler.".CreateTelemetryEvent().Send(_telemetry);
@@ -75,7 +75,7 @@ namespace TubeScan.AppCommands
                 await _discordProxy.StopAsync();
 
                 _discordProxy.Dispose();
-                
+
                 cts.Cancel();
 
                 "Services shutdown".CreateTelemetryEvent().Send(_telemetry);

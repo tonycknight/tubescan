@@ -31,6 +31,6 @@ namespace TubeScan.Io
             var client = new MongoClient(settings);
 
             return client.GetDatabase(config.DatabaseName);
-        }        
+        }
     }
 }

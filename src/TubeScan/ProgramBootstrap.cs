@@ -11,7 +11,8 @@ namespace TubeScan
 {
     internal class ProgramBootstrap
     {
-        public static IServiceProvider CreateServiceCollection() {
+        public static IServiceProvider CreateServiceCollection()
+        {
             var col = new ServiceCollection()
                 .AddSingleton<DiscordClient.IDiscordProxy, DiscordClient.DiscordProxy>()
                 .AddSingleton<IList<Telemetry.ITelemetry>>(sp => new Telemetry.ITelemetry[] { new Telemetry.ConsoleTelemetry() })
@@ -25,12 +26,12 @@ namespace TubeScan
                 .AddSingleton<Config.IFileAppConfigurationProvider>(s => s.GetRequiredService<Config.AppConfigurationProvider>())
                 .AddSingleton<Tfl.ITflClient, Tfl.TflHttpClient>()
                 .AddSingleton<Lines.ILineReferenceProvider, Lines.LineReferenceProvider>()
-                .AddSingleton<Lines.ILineStatusProvider, Lines.TflLineStatusProvider>()                
+                .AddSingleton<Lines.ILineStatusProvider, Lines.TflLineStatusProvider>()
                 .AddSingleton<Lines.ILineProvider, Lines.LineProvider>()
                 .AddSingleton<ISettable<Models.LineStatus>>(sp => (ISettable<Models.LineStatus>)sp.GetService<Lines.ILineProvider>())
                 .AddSingleton<Stations.TflStationProvider, Stations.TflStationProvider>()
                 .AddSingleton<Stations.IStationProvider, Stations.StationProvider>()
-                .AddSingleton<ISettable<Models.Station>>( sp => (ISettable<Models.Station>)sp.GetService<Stations.IStationProvider>())
+                .AddSingleton<ISettable<Models.Station>>(sp => (ISettable<Models.Station>)sp.GetService<Stations.IStationProvider>())
                 .AddSingleton<Stations.IStationTagRepository, Stations.MongoStationTagRepository>()
                 .AddSingleton<Users.IUsersRepository, Users.MongoUsersRepository>()
                 .AddSingleton<Scheduling.IJobScheduler, Scheduling.JobScheduler>()
@@ -38,10 +39,10 @@ namespace TubeScan
                 .AddSingleton<Stations.StationCacheRefreshJob>();
 
             var rateLimit = Policy.RateLimitAsync<HttpResponseMessage>(500, TimeSpan.FromMinutes(1), 20);
-            
+
             var hcb = col.AddHttpClient(Tfl.ITflClient.HttpClientName)
                          .AddPolicyHandler(rateLimit);
-            
+
             return col.BuildServiceProvider();
         }
 
@@ -54,7 +55,7 @@ namespace TubeScan
                             {
                                 Output.Bright.Magenta(attrs.GetAttributeValue<AssemblyProductAttribute, string>(a => a.Product)),
                                 attrs.GetAttributeValue<AssemblyDescriptionAttribute, string>(a => a.Description),
-                    
+
                             }.Join(" - "))
                 .Append("")
                 .Concat(GetVersionNotices(attrs).Select(x => Output.Bright.Yellow(x)))

@@ -15,6 +15,6 @@ namespace TubeScan.Models
         }
 
         public string NaptanId { get; init; }
-        public string Tag {  get; init; }
+        public string Tag { get; init; }
     }
 }

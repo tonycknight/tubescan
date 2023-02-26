@@ -39,13 +39,13 @@ namespace TubeScan.Stations
 
         public static DateTimeOffset? GetResponseDate(this IDictionary<string, string[]> headers)
         {
-            if(headers?.TryGetValue("Date", out var values) == true)
+            if (headers?.TryGetValue("Date", out var values) == true)
             {
                 var val = values.FirstOrDefault();
-                if(val != null && DateTimeOffset.TryParse(val, out var result))
+                if (val != null && DateTimeOffset.TryParse(val, out var result))
                 {
                     return result;
-                }                
+                }
             }
 
             return default;
@@ -53,7 +53,7 @@ namespace TubeScan.Stations
 
         public static Arrival ApplyExpectedWait(this Arrival value, DateTimeOffset? serverTime)
         {
-            if(serverTime != default)
+            if (serverTime != default)
             {
                 var wait = value.ExpectedArrival - serverTime;
                 if (wait >= TimeSpan.Zero)

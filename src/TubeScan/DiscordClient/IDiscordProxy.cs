@@ -10,7 +10,7 @@ namespace TubeScan.DiscordClient
         public DiscordSocketClient Client { get; }
         Task StartAsync();
         Task StopAsync();
-        void AddMessageReceivedHandler(Func<SocketUserMessage, Task> handler);        
+        void AddMessageReceivedHandler(Func<SocketUserMessage, Task> handler);
         Task<IList<IUser>> GetUsersAsync(IEnumerable<ulong> userIds);
     }
 }

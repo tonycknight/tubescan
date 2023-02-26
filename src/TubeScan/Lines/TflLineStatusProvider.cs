@@ -7,7 +7,7 @@ namespace TubeScan.Lines
     internal class TflLineStatusProvider : ILineStatusProvider
     {
         private readonly ITflClient _tflClient;
-        
+
         public TflLineStatusProvider(ITflClient tflClient)
         {
             _tflClient = tflClient;
@@ -20,7 +20,7 @@ namespace TubeScan.Lines
             {
                 throw new ApplicationException($"Bad response from TFL: {resp.HttpStatus} received.");
             }
-            
+
             return resp.Body.ToLineStatuses();
         }
     }

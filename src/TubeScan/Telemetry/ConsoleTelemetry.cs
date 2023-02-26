@@ -24,6 +24,6 @@ namespace TubeScan.Telemetry
 
             _writeMessage(line);
         }
-        
+
     }
 }

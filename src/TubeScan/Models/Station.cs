@@ -20,7 +20,7 @@ namespace TubeScan.Models
 
         public string Name { get; }
         public string ShortName { get; }
-        public string NaptanId {  get; }
+        public string NaptanId { get; }
         public IList<StationLine> Lines { get; }
     }
 }
