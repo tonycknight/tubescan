@@ -24,9 +24,9 @@ namespace TubeScan.DiscordCommands
             }).Join(Environment.NewLine);
         }
 
-        public static Embed RenderStationStatus(this Models.Station station, Models.StationStatus status, 
-                                                    Func<string, string> lineName, 
-                                                    IEnumerable<Models.LineStatus> lineStatus, 
+        public static Embed RenderStationStatus(this Models.Station station, Models.StationStatus status,
+                                                    Func<string, string> lineName,
+                                                    IEnumerable<Models.LineStatus> lineStatus,
                                                     Func<string, string> stationName)
         {
             var crowdingLines = status.GetCrowding();
@@ -103,20 +103,20 @@ namespace TubeScan.DiscordCommands
                         foreach (var train in trains.Take(5))
                         {
                             var dest = stationName(train.DestinationId) ?? "Unknown";
-                            
+
                             yield return $"To **{dest}** arriving at **{train.ExpectedArrival.DateTime.ToUkDateTime().ToString("HH:mm:ss")}**";
-                                                        
+
                             var supplementary = new StringBuilder(train.CurrentLocation);
-                            
+
                             var wait = train.ExpectedWait.HasValue
                                         ? $"**{train.ExpectedWait.Value.Minutes} mins {train.ExpectedWait.Value.Seconds} secs **"
                                         : "";
 
                             if (wait.Length > 0)
                             {
-                                var join =  supplementary.Length > 0 ? $", due in " : $"Due in ";
+                                var join = supplementary.Length > 0 ? $", due in " : $"Due in ";
                                 supplementary.Append(join);
-                                supplementary.Append(wait);                                
+                                supplementary.Append(wait);
                             }
                             if (supplementary.Length > 0)
                             {
@@ -127,7 +127,7 @@ namespace TubeScan.DiscordCommands
                 }
             }
 
-            if(!lineStatusFound)
+            if (!lineStatusFound)
                 yield return "_**No arrivals**_";
         }
 
@@ -154,7 +154,7 @@ namespace TubeScan.DiscordCommands
         }
 
         private static IEnumerable<string> GetLineStatus(string header, Models.LineStatus status, bool fullDetails)
-        {            
+        {
             if (status.HealthStatuses.Count > 1)
             {
                 yield return header;
@@ -174,10 +174,10 @@ namespace TubeScan.DiscordCommands
         }
 
         private static string GetLineStatus(this Models.LineHealthStatus status)
-        {            
-            
-            var formattedText = status.Health == Models.HealthStatus.GoodService 
-                                    ? status.TflHealth 
+        {
+
+            var formattedText = status.Health == Models.HealthStatus.GoodService
+                                    ? status.TflHealth
                                     : $"***{status.TflHealth}***";
 
             var emoji = status.Health switch

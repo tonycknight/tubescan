@@ -17,7 +17,7 @@ namespace TubeScan.Tests.Scheduling
         {
             var t = CreateMockTelemetry();
 
-            var job = Substitute.For<IJob>();            
+            var job = Substitute.For<IJob>();
             var jobInfo = new JobScheduleInfo(job, TimeSpan.Zero);
 
             var je = new JobExecutor(t);

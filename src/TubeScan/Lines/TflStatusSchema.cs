@@ -15,13 +15,13 @@ namespace TubeScan.Lines
     {
         [JsonProperty("statusSeverity")]
         public int StatusSeverity { get; set; }
-        
+
         [JsonProperty("statusSeverityDescription")]
         public string StatusSeverityDescription { get; set; }
-        
+
         [JsonProperty("reason")]
         public string Reason { get; set; }
-        
+
         [JsonProperty("validityPeriods")]
         public TflValidityPeriod[] ValidityPeriods { get; set; }
 
@@ -33,7 +33,7 @@ namespace TubeScan.Lines
     {
         [JsonProperty("fromDate")]
         public DateTimeOffset From { get; set; }
-        
+
         [JsonProperty("toDate")]
         public DateTimeOffset To { get; set; }
 

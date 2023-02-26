@@ -7,7 +7,7 @@
             Id = id;
             Mention = mention;
         }
-                
+
         public ulong Id { get; }
         public string Mention { get; }
         public ulong UserId { get; }

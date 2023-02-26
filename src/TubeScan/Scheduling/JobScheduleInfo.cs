@@ -9,7 +9,7 @@
         }
 
         public TimeSpan Frequency { get; }
-                
+
         public IJob Job { get; }
     }
 }

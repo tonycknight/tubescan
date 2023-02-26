@@ -60,7 +60,7 @@ namespace TubeScan.Tests.Stations
         [InlineData(3, 5)]
         public async Task GetStationsAsync_StationsReturned(int lineCount, int stationCount)
         {
-            IList<Models.Line>? lines = Enumerable.Range(1,lineCount).Select(i => new Models.Line(i.ToString(), "", "")).ToList();
+            IList<Models.Line>? lines = Enumerable.Range(1, lineCount).Select(i => new Models.Line(i.ToString(), "", "")).ToList();
 
             var lp = Substitute.For<ILineProvider>();
             lp.GetLinesAsync().Returns(lines.ToTaskResult());
@@ -125,7 +125,7 @@ namespace TubeScan.Tests.Stations
                     },
                 },
             };
-            var lp = Substitute.For<ILineProvider>();            
+            var lp = Substitute.For<ILineProvider>();
             var tflc = Substitute.For<ITflClient>();
             var tflr1 = new TflResponse()
             {
@@ -155,10 +155,10 @@ namespace TubeScan.Tests.Stations
             r.Crowding.LivePercentageOfBaseline.Should().Be(livePct);
             r.Crowding.AveragePercentageOfBaseline.Should().Be(avgPct);
         }
-        
+
         [Theory]
         [InlineData("", 0.1, 0)]
-        [InlineData(" ", 0.2, 1 )]
+        [InlineData(" ", 0.2, 1)]
         [InlineData("abc", 0.3, 3)]
         public async Task GetStationStatusAsync_NullOrOutOfRangeTimeBands_CrowdingMapped(string naptanId, double livePct, int timeBandCount)
         {
@@ -173,7 +173,7 @@ namespace TubeScan.Tests.Stations
             {
                 NaptanId = naptanId,
                 TimeBands = Enumerable.Range(1, timeBandCount)
-                                      .Select(i => new TflTimeBandStationCrowding() {  PercentageOfBaseLine = 1000, TimeBand = "00:00-00:01"})
+                                      .Select(i => new TflTimeBandStationCrowding() { PercentageOfBaseLine = 1000, TimeBand = "00:00-00:01" })
                                       .ToList(),
             };
             var lp = Substitute.For<ILineProvider>();
@@ -214,7 +214,7 @@ namespace TubeScan.Tests.Stations
 
         public void GetStationStatusAsync_ErrorResponseFromLiveTfl_ExceptionThrown(string naptanId)
         {
-            var now = new DateTime(2022, 04, 01, 12, 0, 0, DateTimeKind.Utc);                        
+            var now = new DateTime(2022, 04, 01, 12, 0, 0, DateTimeKind.Utc);
             var lp = Substitute.For<ILineProvider>();
             var tflc = Substitute.For<ITflClient>();
             var tflr1 = new TflResponse()
@@ -245,7 +245,7 @@ namespace TubeScan.Tests.Stations
                 return true;
             };
 
-            a.Should().ThrowAsync<ApplicationException>().WithMessage("?*");            
+            a.Should().ThrowAsync<ApplicationException>().WithMessage("?*");
         }
 
 
@@ -287,7 +287,7 @@ namespace TubeScan.Tests.Stations
                 await sp.GetStationStatusAsync(naptanId);
                 return true;
             };
-                
+
 
             a.Should().ThrowAsync<ApplicationException>().WithMessage("?*");
         }

@@ -28,9 +28,9 @@ namespace TubeScan.Stations
                               .Pipe(v => new Lazy<Task<IList<Station>>>(v.ToTaskResult()));
         }
 
-        private static async Task<IList<Station>> GetStationsFromSourceAsync(IStationProvider sourceProvider) 
+        private static async Task<IList<Station>> GetStationsFromSourceAsync(IStationProvider sourceProvider)
             => await sourceProvider.GetStationsAsync();
 
-        
+
     }
 }

@@ -16,7 +16,7 @@ namespace TubeScan.Scheduling
         public async Task<JobExecuteResult> ExecuteJobAsync(JobScheduleInfo job)
         {
             var sw = new Stopwatch();
-            
+
             try
             {
                 sw.Start();
@@ -32,7 +32,7 @@ namespace TubeScan.Scheduling
                 sw.Stop();
                 ex.Message.CreateTelemetryEvent(TelemetryEventKind.Error).Send(_telemetry);
                 return new JobExecuteResultError(job.Job, sw.Elapsed, ex);
-            }            
+            }
         }
     }
 }

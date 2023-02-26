@@ -15,7 +15,7 @@ namespace TubeScan.Tests.Scheduling
         [Theory]
         [InlineData(0)]
         [InlineData(1)]
-        [InlineData(3)] 
+        [InlineData(3)]
         public void Jobs_Matches_RegisteredJobs(int count)
         {
             var t = CreateMockTelemetry();
@@ -26,7 +26,7 @@ namespace TubeScan.Tests.Scheduling
 
             using var js = new JobScheduler(t);
             js.Register(jobs);
-            
+
 
             var check = js.Jobs.ToList();
             check.Should().BeEquivalentTo(jobs);

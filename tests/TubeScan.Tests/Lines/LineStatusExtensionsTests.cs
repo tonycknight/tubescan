@@ -13,7 +13,7 @@ namespace TubeScan.Tests.Lines
         {
             var existingStatus = new[] { new LineStatus() };
             var newStatus = new[] { new LineStatus() };
-                              
+
             var deltas = existingStatus.GetDeltas(newStatus);
 
             deltas.Should().BeEmpty();
@@ -22,7 +22,7 @@ namespace TubeScan.Tests.Lines
         [Theory]
         [InlineData("a", "b", "ok", "ok")]
         [InlineData("a", "b", "bad service", "bad service")]
-        
+
         public void GetDeltas_OldExists_NoDeltas(string oldId, string newId, string oldStatus, string newStatus)
         {
             var existingLineStatus = new[] { new LineStatus() { Id = oldId, HealthStatuses = new[] { new LineHealthStatus() { TflHealth = oldStatus } } } };
@@ -30,7 +30,7 @@ namespace TubeScan.Tests.Lines
 
             var deltas = existingLineStatus.GetDeltas(newLineStatus);
 
-            deltas.Should().BeEmpty();            
+            deltas.Should().BeEmpty();
         }
 
 

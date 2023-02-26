@@ -10,7 +10,7 @@ namespace TubeScan.Stations
         private readonly ISettable<Station> _stationSettable;
         private readonly IStationProvider _stationProvider;
 
-        public StationCacheRefreshJob(ITelemetry telemetry, 
+        public StationCacheRefreshJob(ITelemetry telemetry,
                                       ISettable<Models.Station> stationSettable,
                                       TflStationProvider stationProvider)
         {

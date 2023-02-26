@@ -10,10 +10,10 @@ namespace TubeScan.Stations
 
         [BsonElement("userId")]
         public ulong UserId { get; set; }
-                
+
         [BsonElement("tag")]
         public string Tag { get; init; }
-        
+
         [BsonElement("naptanId")]
         public string NaptanId { get; init; }
 

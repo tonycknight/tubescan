@@ -153,12 +153,25 @@ Target.create "Consolidate code coverage" (fun _ ->
     if not result.OK then failwithf "reportgenerator failed!"  
 )
 
+Target.create "Check Style Rules" (fun _ ->
+    let args = "--verify-no-changes"
+    let result = DotNet.exec id "format" args
+    if not result.OK then failwithf "Style rule checks failed!"      
+)
+
+Target.create "Apply Style Rules" (fun _ ->
+    let args = ""
+    let result = DotNet.exec id "format" args
+    if not result.OK then failwithf "Style rule application failed!"      
+)
+
 Target.create "PublishRuntime-ubuntu-x64" (fun _ -> publishAndCopy "ubuntu-x64")
 
 Target.create "All" ignore
 
 "Clean"
   ==> "Restore"
+  ==> "Check Style Rules"
   ==> "Build"
   ==> "Pack"
   ==> "Unit Tests"

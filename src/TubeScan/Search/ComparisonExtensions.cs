@@ -7,7 +7,7 @@ namespace TubeScan.Search
     internal static class ComparisonExtensions
     {
         private static readonly char[] WordDelim = " .,!?[]<>()-".ToCharArray();
-        
+
         public static IEnumerable<SearchInfo<T>> Match<T>(this IEnumerable<T> values,
                                                           string query, Func<T, string> keySelector)
         {
@@ -27,7 +27,7 @@ namespace TubeScan.Search
                                        var score = k.StripPunctuation().GetDamerauLevenshteinDistance(query, true);
                                        return score == 0 ? -1 : score;
                                    });
-                
+
                 return keyScores.Sum();
             };
 
@@ -41,34 +41,34 @@ namespace TubeScan.Search
         {
             var qs = query.Tokenise().Select(StripPunctuation).ToList();
 
-            foreach(var value in values)
-            {                
+            foreach (var value in values)
+            {
                 var vs = keySelector(value).Tokenise().Select(StripPunctuation).Where(s => s.Length > 0);
-                
+
                 var scores = vs.Zip(qs.ToInfinite(), (v, q) => (v, q))
                                .Select(p => new { p = p, s = p.v.GetDamerauLevenshteinDistance(p.q, true) });
-                
+
                 var hits = scores.Where(a => a.s <= 2)
                                .Select(a => a.s)
                                .ToList();
-                
+
                 var score = hits.Any()
                     ? hits.Take(3).Sum()
                     : int.MaxValue;
-                    
+
                 yield return new SearchInfo<T>(value, score);
             }
         }
 
-        public static IEnumerable<string> Tokenise(this string value) 
+        public static IEnumerable<string> Tokenise(this string value)
             => value.TokeniseInner().Where(s => s?.Length > 0);
 
 
         public static string StripPunctuation(this string value)
         {
             var result = new StringBuilder();
-            
-            foreach(var c in value)
+
+            foreach (var c in value)
             {
                 if (!char.IsPunctuation(c))
                 {
@@ -92,7 +92,7 @@ namespace TubeScan.Search
                 {
                     s = value.Substring(i, j - i).Trim();
                     i = j;
-                    yield return s;                                        
+                    yield return s;
                 }
             }
 

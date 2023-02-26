@@ -13,7 +13,7 @@
             var uri = new UriBuilder(tflDomain);
             uri.Path = path;
             uri.Query += query;
-            
+
             if (appKey != null)
             {
                 var p = uri.Query.Length > 0 ? "&" : "";

@@ -10,7 +10,7 @@ namespace TubeScan.DiscordCommands
                             .Where(t => t.IsAssignableTo(typeof(ModuleBase<SocketCommandContext>)));
 
         public static IEnumerable<(string, string, string[])> GetCommandHelp(this IEnumerable<Type> discordCommands)
-        {            
+        {
             var methods = discordCommands.SelectMany(t => t.GetMethods())
                                          .Select(mi => new
                                          {

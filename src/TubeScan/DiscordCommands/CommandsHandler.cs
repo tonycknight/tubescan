@@ -34,7 +34,7 @@ namespace TubeScan.DiscordCommands
 
         public async Task HandleCommandAsync(SocketMessage arg)
         {
-            var message = arg as SocketUserMessage;            
+            var message = arg as SocketUserMessage;
             var argPos = 0;
 
             if (message == null ||

@@ -11,7 +11,7 @@ namespace TubeScan.Lines
         private IList<LineStatus> _lastKnownLineStatuses;
 
         public LineProvider(ILineReferenceProvider linesProvider, ILineStatusProvider lineStatusProvider)
-        {            
+        {
             _linesProvider = linesProvider;
             _lineStatusProvider = lineStatusProvider;
         }

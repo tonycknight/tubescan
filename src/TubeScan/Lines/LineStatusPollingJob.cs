@@ -22,7 +22,7 @@ namespace TubeScan.Lines
         private IList<LineStatus>? _lastKnownLineStatuses;
 
         public LineStatusPollingJob(ITelemetry telemetry, IDiscordProxy discordProxy,
-                                    ISettable<Models.LineStatus> lineSettable,     
+                                    ISettable<Models.LineStatus> lineSettable,
                                     ILineReferenceProvider lineReferenceProvider,
                                     ILineStatusProvider lineProvider, IUsersRepository usersRepo)
         {
@@ -43,11 +43,11 @@ namespace TubeScan.Lines
             $"Received {newLineStatuses.Count} line statuses from TFL.".CreateTelemetryEvent().Send(_telemetry);
 
             if (_lastKnownLineStatuses != null && newLineStatuses.NullToEmpty().Any())
-            {                
+            {
                 var lines = _lineReferenceProvider.GetLines().NullToEmpty().ToDictionary(s => s.Id);
                 var newStatuses = _lastKnownLineStatuses.GetDeltas(newLineStatuses).ToDictionary(s => s.Id);
                 if (newStatuses.Any())
-                {                    
+                {
                     await BroadcastToUsersAsync(lines, newStatuses);
                 }
             }
@@ -59,7 +59,7 @@ namespace TubeScan.Lines
         {
             $"Found {newStatuses.Count} new line statuses.".CreateTelemetryEvent().Send(_telemetry);
 
-            var users = await _usersRepo.GetAllUsersAsync();            
+            var users = await _usersRepo.GetAllUsersAsync();
             if (users.Count > 0)
             {
                 var userIds = users.Select(u => u.Id);

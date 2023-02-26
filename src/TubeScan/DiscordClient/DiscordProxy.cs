@@ -9,7 +9,7 @@ namespace TubeScan.DiscordClient
 {
     [ExcludeFromCodeCoverage]
     internal class DiscordProxy : IDiscordProxy
-    {        
+    {
         private readonly IAppConfigurationProvider _configProvider;
         private readonly ITelemetry _telemetry;
         private readonly ConcurrentBag<Func<SocketUserMessage, Task>> _messageReceivedHandlers;
@@ -76,7 +76,7 @@ namespace TubeScan.DiscordClient
         {
             _messageReceivedHandlers.Add(handler);
         }
-                
+
         public async Task<IList<IUser>> GetUsersAsync(IEnumerable<ulong> userIds)
         {
             var tasks = userIds.ToArray()

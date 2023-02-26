@@ -18,9 +18,9 @@ namespace TubeScan.Users
         public async Task<IList<User>> GetAllUsersAsync()
         {
             var col = _usersCol.Value;
-            
+
             var filter = FilterDefinition<UserDto>.Empty;
-                        
+
             var result = (await col.FindAsync(filter)).ToEnumerable();
 
             return result.Select(x => x.FromDto()).ToList();

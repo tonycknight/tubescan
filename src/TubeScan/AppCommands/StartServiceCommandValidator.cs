@@ -17,6 +17,6 @@ namespace TubeScan.AppCommands
 #pragma warning restore CS8601 // Possible null reference assignment.
 
             return command;
-        }        
+        }
     }
 }

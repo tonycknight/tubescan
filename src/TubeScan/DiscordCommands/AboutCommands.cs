@@ -18,7 +18,7 @@ namespace TubeScan.DiscordCommands
             _telemetry = telemetry;
         }
 
-        [Command("about", ignoreExtraArgs:true, RunMode = RunMode.Async)]
+        [Command("about", ignoreExtraArgs: true, RunMode = RunMode.Async)]
         [System.ComponentModel.Description("About this bot")]
         public Task ShowAboutAsync()
         {
@@ -33,7 +33,7 @@ namespace TubeScan.DiscordCommands
                 }
                 .Concat(ProgramBootstrap.GetVersionNotices(attrs))
                 .Concat(ProgramBootstrap.Get3rdPartyNotices())
-                .Concat(new[] { "", $"For command help, just enter ``{HelpCommand}``.", ""})
+                .Concat(new[] { "", $"For command help, just enter ``{HelpCommand}``.", "" })
                 .Where(x => x != null).Join(Environment.NewLine);
 
                 var eb = new Discord.EmbedBuilder()
@@ -55,12 +55,12 @@ namespace TubeScan.DiscordCommands
         public Task ShowHelpAsync()
         {
             try
-            {                
+            {
                 var msg = this.GetType().GetDiscordCommandTypes()
                                 .GetCommandHelp()
                                 .FormatCommandHelp()
                                 .Join(Environment.NewLine);
-                
+
                 return ReplyAsync(msg);
             }
             catch (Exception ex)
@@ -69,5 +69,5 @@ namespace TubeScan.DiscordCommands
                 return ReplyAsync(ex.Message);
             }
         }
-        }
+    }
 }

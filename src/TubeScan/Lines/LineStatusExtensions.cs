@@ -9,11 +9,11 @@ namespace TubeScan.Lines
         {
             var getStatuses = (LineStatus ls) => ls.HealthStatuses.NullToEmpty().Select(hs => hs.TflHealth.ToLowerInvariant()).Distinct().OrderBy(s => s);
 
-            foreach(var lineStatus in lineStatuses)
+            foreach (var lineStatus in lineStatuses)
             {
                 var newLineStatus = newLineStatuses.FirstOrDefault(l => l.Id == lineStatus.Id);
-                if(newLineStatus != null)
-                {            
+                if (newLineStatus != null)
+                {
                     var lineTflHealths = getStatuses(lineStatus);
                     var newLineTflHealths = getStatuses(newLineStatus);
 
@@ -25,7 +25,7 @@ namespace TubeScan.Lines
             }
         }
 
-        public static IList<LineStatus> ToLineStatuses(this string json) 
+        public static IList<LineStatus> ToLineStatuses(this string json)
             => Newtonsoft.Json.JsonConvert.DeserializeObject<TflLineStatusCheck[]>(json)
                                           .Select(ToLineStatus)
                                           .ToList();
@@ -67,7 +67,7 @@ namespace TubeScan.Lines
                 Health = ToLineHealthStatus(value.StatusSeverityDescription)
             };
 
-        private static HealthStatus ToLineHealthStatus(string description) 
+        private static HealthStatus ToLineHealthStatus(string description)
             => description switch
             {
                 "Good Service" => HealthStatus.GoodService,

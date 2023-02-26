@@ -16,7 +16,7 @@ namespace TubeScan.DiscordCommands
         private readonly IStationProvider _stationProvider;
         private readonly IStationTagRepository _tagRepo;
 
-        public StationCommands(ITelemetry telemetry, 
+        public StationCommands(ITelemetry telemetry,
                                 Lines.ILineProvider lineProvider,
                                 IStationProvider stationProvider, IStationTagRepository tagRepo)
         {
@@ -75,7 +75,7 @@ namespace TubeScan.DiscordCommands
                 var responseMsg = await ReplyAsync(RenderingExtensions.Thinking);
 
                 var deleted = await _tagRepo.RemoveAsync(authorId, tagName);
-                
+
                 var responseText = deleted ? "Done." : "The tag was not found.";
 
                 responseMsg.ModifyAsync(mp => { mp.Content = responseText; });
@@ -109,7 +109,7 @@ namespace TubeScan.DiscordCommands
 
                     responseText = tags.RenderStationTags(stations);
                 }
-                responseMsg.ModifyAsync(mp => { mp.Content = responseText; });                
+                responseMsg.ModifyAsync(mp => { mp.Content = responseText; });
             }
             catch (Exception ex)
             {
@@ -138,9 +138,9 @@ namespace TubeScan.DiscordCommands
                     {
                         mp.Content = "Station/tag not found.";
                     });
-                    return;                    
+                    return;
                 }
-                                
+
                 var stationStatus = await _stationProvider.GetStationStatusAsync(station.NaptanId);
 
                 var allLinesStatuses = await _lineProvider.GetLineStatusAsync();
@@ -163,7 +163,7 @@ namespace TubeScan.DiscordCommands
             {
                 ex.ToString().CreateTelemetryEvent(TelemetryEventKind.Error).Send(_telemetry);
                 ReplyAsync(ex.Message);
-            }            
+            }
         }
 
         [Command("find", RunMode = RunMode.Async)]
@@ -171,12 +171,12 @@ namespace TubeScan.DiscordCommands
         public async Task FindStationAsync([Remainder] string stationNameQuery)
         {
             try
-            {                
+            {
                 var responseMsg = await ReplyAsync(RenderingExtensions.Thinking);
                 var responseText = "";
-                                
+
                 var matches = (await _stationProvider.GetStationsAsync())
-                                      .Match(stationNameQuery, s => s.ShortName)                                      
+                                      .Match(stationNameQuery, s => s.ShortName)
                                       .Take(5).ToList();
                 if (!matches.Any())
                 {

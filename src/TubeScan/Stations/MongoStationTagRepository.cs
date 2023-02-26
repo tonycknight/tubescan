@@ -26,7 +26,7 @@ namespace TubeScan.Stations
         }
 
         public async Task<IList<StationTag>> GetAllAsync(ulong userId)
-        {            
+        {
             var col = _tagsCol.Value;
             var filter = CreateUserIdFilter(userId);
 

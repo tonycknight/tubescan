@@ -16,7 +16,7 @@ namespace TubeScan.DiscordCommands
             _telemetry = telemetry;
             _lineProvider = lineProvider;
         }
-                
+
         [Command("lines", ignoreExtraArgs: true, RunMode = RunMode.Async)]
         [System.ComponentModel.Description("Show line status")]
         public async Task ShowLineStatusAsync()
@@ -24,13 +24,13 @@ namespace TubeScan.DiscordCommands
             try
             {
                 var responseMsg = await ReplyAsync(RenderingExtensions.Thinking);
-                
+
                 var lines = await _lineProvider.GetLinesAsync();
                 var statuses = await _lineProvider.GetLineStatusAsync();
                 var stats = statuses.ToDictionary(l => l.Id, l => l, StringComparer.InvariantCultureIgnoreCase);
-                
+
                 var msg = lines.RenderLinesStatus(stats, true);
-                if(msg.Length > 4095)
+                if (msg.Length > 4095)
                 {
                     msg = lines.RenderLinesStatus(stats, false);
                 }

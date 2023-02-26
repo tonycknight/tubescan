@@ -39,7 +39,7 @@ namespace TubeScan.Tests.Search
                 var values = Enumerable.Range(1, count.Get)
                                        .Select(x => "B" + new String('A', x))
                                        .ToList();
-                
+
                 var expected = values.First();
 
                 var result = values.Match("B", x => x)
@@ -68,7 +68,7 @@ namespace TubeScan.Tests.Search
         }
 
         [Theory]
-        [InlineData("","")]
+        [InlineData("", "")]
         [InlineData(" ", " ")]
         [InlineData("a!A", "aA")]
         [InlineData("King's", "Kings")]

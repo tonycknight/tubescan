@@ -19,7 +19,7 @@ namespace TubeScan.Tests.Lines
                 IsSuccess = false,
                 Body = "[]",
             };
-            
+
             var tfl = Substitute.For<ITflClient>();
             tfl.GetAsync(Arg.Is<string>(s => s.Length > 0), false).Returns(Task.FromResult(tflResp));
 
@@ -27,7 +27,7 @@ namespace TubeScan.Tests.Lines
 
 
             Func<Task<IList<Models.LineStatus>?>> f = async () => await p.GetLineStatusAsync();
-            
+
             await f.Should().ThrowAsync<ApplicationException>().WithMessage("?*");
         }
 
