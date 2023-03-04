@@ -13,7 +13,7 @@ env:
   
 jobs:
   sca:
-    uses: ./.github/workflows/codeql-analysis.yml
+    uses: ./.github/workflows/sca.yml
 
   build:
     runs-on: ubuntu-latest
