@@ -1,5 +1,4 @@
-﻿using Tk.Extensions.Tasks;
-using TubeScan.Models;
+﻿using TubeScan.Models;
 using TubeScan.Tfl;
 
 namespace TubeScan.Lines
@@ -15,7 +14,7 @@ namespace TubeScan.Lines
 
         public async Task<IList<LineStatus>> GetLineStatusAsync()
         {
-            var resp = await _tflClient.GetAsync("Line/Mode/tube/Status?detail=true", false);
+            var resp = await _tflClient.GetAsync("Line/Mode/tube,elizabeth-line/Status?detail=true", false);
             if (!resp.IsSuccess)
             {
                 throw new ApplicationException($"Bad response from TFL: {resp.HttpStatus} received.");

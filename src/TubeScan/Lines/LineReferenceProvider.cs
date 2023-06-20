@@ -21,7 +21,8 @@ namespace TubeScan.Lines
                     new Line("metropolitan", "Metropolitan", "#9B0058"),
                     new Line("northern", "Northern", "#000000"),
                     new Line("victoria", "Victoria", "#0098D8"),
-                    new Line("waterloo-city", "Waterloo & City", "#93CEBA")
+                    new Line("waterloo-city", "Waterloo & City", "#93CEBA"),
+                    new Line("elizabeth", "Elizabeth", "#6950A1")
                 };
     }
 }
