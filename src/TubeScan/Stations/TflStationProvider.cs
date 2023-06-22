@@ -35,12 +35,19 @@ namespace TubeScan.Stations
         {
             var now = _time.UtcNow();
 
+            var statusTasks = new[]
+            {
+                GetLiveStationCrowdingAsync(naptanId),
+                GetAverageStationCrowdingAsync(naptanId, now)
+            };
+            var statuses = await Task.WhenAll(statusTasks);
+                        
             return new StationStatus(naptanId)
             {
                 Crowding = new StationCrowding()
                 {
-                    LivePercentageOfBaseline = await GetLiveStationCrowdingAsync(naptanId),
-                    AveragePercentageOfBaseline = await GetAverageStationCrowdingAsync(naptanId, now),
+                    LivePercentageOfBaseline = statuses[0],
+                    AveragePercentageOfBaseline = statuses[1],
                 },
                 Arrivals = await GetStationArrivalsAsync(naptanId)
             };
