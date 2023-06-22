@@ -41,7 +41,7 @@ namespace TubeScan.Stations
                 GetAverageStationCrowdingAsync(naptanId, now)
             };
             var statuses = await Task.WhenAll(statusTasks);
-                        
+
             return new StationStatus(naptanId)
             {
                 Crowding = new StationCrowding()
