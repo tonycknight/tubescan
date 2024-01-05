@@ -96,6 +96,11 @@ jobs:
           path: |
             ./StrykerOutput/**/reports/* 
 
+      - name: SCA summary
+        if: always()
+        run: |          
+          cat ./StrykerOutput/**/*.md >> $GITHUB_STEP_SUMMARY
+
   codeql:
     uses: ./.github/workflows/codeql-analysis.yml
 
