@@ -96,7 +96,7 @@ jobs:
           path: |
             ./StrykerOutput/**/reports/* 
 
-      - name: SCA summary
+      - name: Stryker summary
         if: always()
         run: |          
           cat ./StrykerOutput/**/*.md >> $GITHUB_STEP_SUMMARY
