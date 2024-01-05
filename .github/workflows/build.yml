@@ -95,12 +95,7 @@ jobs:
           name: stryker.results
           path: |
             ./StrykerOutput/**/reports/* 
-
-      - name: Stryker summary
-        if: always()
-        run: |          
-          cat ./StrykerOutput/**/*.md >> $GITHUB_STEP_SUMMARY
-
+      
   codeql:
     uses: ./.github/workflows/codeql-analysis.yml
 

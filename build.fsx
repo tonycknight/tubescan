@@ -140,7 +140,7 @@ Target.create "Unit Tests" (fun _ ->
 
 Target.create "Stryker" (fun _ ->
     !! "tests/**/*.csproj"
-    |> Seq.iter (fun p ->   let args = sprintf "-tp %s -b 55 -r 'Progress' -r 'Html' -r 'Markdown' " p
+    |> Seq.iter (fun p ->   let args = sprintf "-tp %s -b 55 " p
                             let result = DotNet.exec id "dotnet-stryker" args
                             if not result.OK then failwithf "Stryker failed!"
                             )
