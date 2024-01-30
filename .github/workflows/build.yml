@@ -95,7 +95,7 @@ jobs:
           name: stryker.results
           path: |
             ./StrykerOutput/**/reports/* 
-
+      
   codeql:
     uses: ./.github/workflows/codeql-analysis.yml
 
