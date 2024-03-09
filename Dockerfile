@@ -9,7 +9,7 @@ WORKDIR /app
 RUN adduser -u 5678 --disabled-password --gecos "" tubescanuser && chown -R tubescanuser /app
 USER tubescanuser
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS base
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BuildVersion
 WORKDIR /src
 
