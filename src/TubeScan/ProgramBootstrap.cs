@@ -17,7 +17,7 @@ namespace TubeScan
                 .AddSingleton<DiscordClient.IDiscordProxy, DiscordClient.DiscordProxy>()
                 .AddSingleton<IList<Telemetry.ITelemetry>>(sp => new Telemetry.ITelemetry[] { new Telemetry.ConsoleTelemetry() })
                 .AddSingleton<Telemetry.ITelemetry, Telemetry.AggregatedTelemetry>()
-                .AddSingleton<ITimeProvider, TimeProvider>()
+                .AddSingleton<ITimeProvider, Tk.Extensions.Time.TimeProvider>()
                 .AddSingleton<Io.IIoProvider, Io.IoProvider>()
                 .AddSingleton<Config.FileAppConfigurationProvider>()
                 .AddSingleton<Config.EnvVarAppConfigurationProvider>()
