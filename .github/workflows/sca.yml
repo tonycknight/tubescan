@@ -20,6 +20,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Restore packages
+        run: |
+          dotnet tool restore
+          dotnet restore
+
       - name: Run SCA
         uses: tonycknight/pkgchk-action@v1.0.12
         with:

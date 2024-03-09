@@ -102,6 +102,7 @@ jobs:
         
       - name: Restore packages
         run: |
+          dotnet tool restore
           dotnet restore
               
       - name: Run Mutation testing
