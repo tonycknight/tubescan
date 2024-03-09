@@ -16,9 +16,11 @@ namespace TubeScan.Tests.Tfl
         [InlineData("http://test.com", "?test", "abc", "http://test.com/?test&appKey=abc")]
         [InlineData("http://test.com", "test?xyz=true", null, "http://test.com/test?xyz=true")]
         [InlineData("http://test.com", "test?xyz=true", "abc", "http://test.com/test?xyz=true&appKey=abc")]
-        public void CreateUri_UriComposed(string domain, string route, string appKey, string expectedUri)
+        public void CreateUri_UriComposed(string domain, string route, string? appKey, string expectedUri)
         {
+#pragma warning disable CS8604 // Possible null reference argument.
             var result = domain.CreateUri(route, appKey);
+#pragma warning restore CS8604 // Possible null reference argument.
 
             var u = new Uri(result);
 

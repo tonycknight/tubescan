@@ -21,35 +21,23 @@ jobs:
       contents: read
       security-events: write
 
-    strategy:
-      fail-fast: false
-      matrix:
-        language: [ 'csharp' ]
-
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
+      uses: github/codeql-action/init@v3
       with:
-        languages: ${{ matrix.language }}
+        languages: 'csharp'
 
     - name: Setup .NET Core SDK
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: "6.0.x"
+      uses: actions/setup-dotnet@v4
         
     - name: dotnet tool restore
       run: dotnet tool restore
 
-    # Disabled, as Fake throws an NRE on Build within 5 milliseconds of start. Autobuild used instead.
-    #- name: Run build
-    #  run: dotnet fake run "build.fsx" -t "Build"
-
     - name: Autobuild
-      uses: github/codeql-action/autobuild@v2
-
+      uses: github/codeql-action/autobuild@v3
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
+      uses: github/codeql-action/analyze@v3

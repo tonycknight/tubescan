@@ -1,6 +1,6 @@
 ARG BuildVersion
 
-FROM mcr.microsoft.com/dotnet/runtime:6.0-focal AS base
+FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
 WORKDIR /app
 
 
@@ -9,7 +9,7 @@ WORKDIR /app
 RUN adduser -u 5678 --disabled-password --gecos "" tubescanuser && chown -R tubescanuser /app
 USER tubescanuser
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BuildVersion
 WORKDIR /src
 
@@ -23,7 +23,7 @@ RUN dotnet build "TubeScan.csproj" -c Release -o /app/build /p:AssemblyInformati
 
 FROM build AS publish
 ARG BuildVersion
-RUN dotnet publish "TubeScan.csproj" -c Release -o /app/publish /p:UseAppHost=false /p:AssemblyInformationalVersion=${BuildVersion} /p:AssemblyFileVersion=${BuildVersion} /p:Version=${BuildVersion}
+RUN dotnet publish "TubeScan.csproj" -c Release -o /app/publish /p:AssemblyInformationalVersion=${BuildVersion} /p:AssemblyFileVersion=${BuildVersion} /p:Version=${BuildVersion} --os linux --arch x64 --self-contained
 
 FROM base AS final
 WORKDIR /app
