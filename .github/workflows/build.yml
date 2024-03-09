@@ -1,6 +1,5 @@
 name: Build & Release
 
-
 on:
   push:
   pull_request:
@@ -15,7 +14,7 @@ jobs:
   sca:
     uses: ./.github/workflows/sca.yml
 
-  build:
+  check-style:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,14 +22,35 @@ jobs:
 
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: "8.0.x"
-        
-      - name: dotnet tool restore
-        run: dotnet tool restore
-              
-      - name: Run build
-        run: dotnet fake run "build.fsx" -t "Consolidate code coverage"
+                
+      - name: Restore packages
+        run: |
+          dotnet tool restore
+          dotnet restore
+
+      - name: Check Style
+        run: dotnet format --verify-no-changes
+
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v4
+                
+      - name: Restore packages
+        run: |
+          dotnet tool restore
+          dotnet restore
+      
+      - name: Unit tests
+        run: dotnet test -c Debug --logger "trx;LogFileName=test_results.trx" /p:CollectCoverage=true /p:CoverletOutput=./TestResults/coverage.info /p:CoverletOutputFormat=cobertura
+
+      - name: Consolidate coverage
+        run: dotnet reportgenerator -reports:'./tests/**/coverage.info' -reporttypes:'html' -targetdir:'./publish/codecoverage'
 
       - name: Archive Test results
         uses: actions/upload-artifact@v3
@@ -79,14 +99,13 @@ jobs:
 
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: "8.0.x"
         
-      - name: dotnet tool restore
-        run: dotnet tool restore
+      - name: Restore packages
+        run: |
+          dotnet restore
               
-      - name: Run build
-        run: dotnet fake run "build.fsx" -t "Stryker"
+      - name: Run Mutation testing
+        run: dotnet dotnet-stryker
 
       - name: Archive Stryker results
         uses: actions/upload-artifact@v3
@@ -101,7 +120,7 @@ jobs:
 
   build-docker-image:
     runs-on: ubuntu-latest
-    needs:   [ build, sca, codeql, stryker ]
+    needs:   [ check-style, unit-tests, sca, codeql, stryker ]
 
     steps:
       - uses: actions/checkout@v4
@@ -111,7 +130,6 @@ jobs:
         run: |
           echo "docker-image-name=${{ env.docker-image-name }}-preview" >> $GITHUB_ENV
         
-
       - name: Build docker image
         run: docker build -t ${{ env.docker-image-name }} --build-arg BuildVersion=${{ env.build-version-number }} .
 
