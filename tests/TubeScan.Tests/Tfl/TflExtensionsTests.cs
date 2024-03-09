@@ -16,7 +16,7 @@ namespace TubeScan.Tests.Tfl
         [InlineData("http://test.com", "?test", "abc", "http://test.com/?test&appKey=abc")]
         [InlineData("http://test.com", "test?xyz=true", null, "http://test.com/test?xyz=true")]
         [InlineData("http://test.com", "test?xyz=true", "abc", "http://test.com/test?xyz=true&appKey=abc")]
-        public void CreateUri_UriComposed(string domain, string route, string appKey, string expectedUri)
+        public void CreateUri_UriComposed(string domain, string route, string? appKey, string expectedUri)
         {
             var result = domain.CreateUri(route, appKey);
 

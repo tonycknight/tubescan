@@ -59,7 +59,7 @@ namespace TubeScan.Tests.Config
         [InlineData("a", "b", "c", "d", "")]
         [InlineData("a", "b", "c", "d", " ")]
         [InlineData("", "", "", "", "")]
-        public void Validate_InvalidValues_ThrowsException(string clientId, string clientToken, string connection, string db, string appKey)
+        public void Validate_InvalidValues_ThrowsException(string? clientId, string? clientToken, string? connection, string? db, string? appKey)
         {
             var config = new AppConfiguration()
             {
