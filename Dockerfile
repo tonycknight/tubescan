@@ -1,6 +1,6 @@
 ARG BuildVersion
 
-FROM mcr.microsoft.com/dotnet/runtime:6.0-focal AS base
+FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
 WORKDIR /app
 
 
@@ -9,7 +9,7 @@ WORKDIR /app
 RUN adduser -u 5678 --disabled-password --gecos "" tubescanuser && chown -R tubescanuser /app
 USER tubescanuser
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS base
 ARG BuildVersion
 WORKDIR /src
 
