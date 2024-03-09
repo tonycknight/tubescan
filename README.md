@@ -15,13 +15,14 @@ A full list of features and commands is [here](./docs/bot_actions.md).
 
 ## Build
 
-``build.bat``
+You'll the .Net 8 SDK installed
 
-or
 
-``dotnet tool restore``
-
-``dotnet fake run "build.fsx" -t "All"``
+```
+dotnet tool restore
+dotnet restore
+dotnet build
+```
 
 
 ## Bot Configuration
@@ -47,4 +48,3 @@ docker run -it --rm   -e TubeScan_Discord_DiscordClientId=<Discord bot Client ID
                         -e TubeScan_Tfl_AppKey=<TFL bot app key>  
                         ghcr.io/tonycknight/tubescan:<image tag>
 ```
-
