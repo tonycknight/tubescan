@@ -2,18 +2,21 @@
 using Tk.Extensions.Time;
 using TubeScan.Lines;
 using TubeScan.Models;
+using TubeScan.Telemetry;
 using TubeScan.Tfl;
 
 namespace TubeScan.Stations
 {
     internal class TflStationProvider : IStationProvider
     {
+        private readonly ITelemetry _telemetry;
         private readonly ITflClient _tflClient;
         private readonly ILineProvider _lineProvider;
         private readonly ITimeProvider _time;
 
-        public TflStationProvider(ITflClient tflClient, ILineProvider lineProvider, ITimeProvider time)
+        public TflStationProvider(ITelemetry telemetry, ITflClient tflClient, ILineProvider lineProvider, ITimeProvider time)
         {
+            _telemetry = telemetry;
             _tflClient = tflClient;
             _lineProvider = lineProvider;
             _time = time;
@@ -113,10 +116,14 @@ namespace TubeScan.Stations
 
             var serverTime = resp.Headers.GetResponseDate();
 
-            return resp.Body.ToArrivals()
+            var result = resp.Body.ToArrivals()
                         .Where(a => !string.IsNullOrEmpty(a.DestinationId))
                         .Select(a => a.ApplyExpectedWait(serverTime))
                         .ToList();
+
+            $"Received {result.Count} arrival items for {naptanId}.".CreateTelemetryEvent(TelemetryEventKind.Trace).Send(_telemetry);
+
+            return result;
         }
     }
 }

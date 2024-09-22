@@ -33,7 +33,7 @@ namespace TubeScan.DiscordCommands
                 }
                 .Concat(ProgramBootstrap.GetVersionNotices(attrs))
                 .Concat(ProgramBootstrap.Get3rdPartyNotices())
-                .Concat(new[] { "", $"For command help, just enter ``{HelpCommand}``.", "" })
+                .Concat(new[] { "", $"For command help, just enter ``{HelpCommand}``.", "", "*Thank you for using my software*" })
                 .Where(x => x != null).Join(Environment.NewLine);
 
                 var eb = new Discord.EmbedBuilder()

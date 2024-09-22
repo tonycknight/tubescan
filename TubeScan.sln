@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TubeScan", "src\TubeScan\Tu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{C74E29E9-157A-4142-B251-B736E99F49F0}"
 	ProjectSection(SolutionItems) = preProject
-		build.bat = build.bat
-		build.fsx = build.fsx
 		.github\CODEOWNERS = .github\CODEOWNERS
 		paket.dependencies = paket.dependencies
 	EndProjectSection
