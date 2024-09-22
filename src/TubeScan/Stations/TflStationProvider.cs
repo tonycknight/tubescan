@@ -120,9 +120,9 @@ namespace TubeScan.Stations
                         .Where(a => !string.IsNullOrEmpty(a.DestinationId))
                         .Select(a => a.ApplyExpectedWait(serverTime))
                         .ToList();
-                        
+
             $"Received {result.Count} arrival items for {naptanId}.".CreateTelemetryEvent(TelemetryEventKind.Trace).Send(_telemetry);
-            
+
             return result;
         }
     }
