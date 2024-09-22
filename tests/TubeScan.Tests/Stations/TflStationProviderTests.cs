@@ -8,6 +8,7 @@ using Tk.Extensions.Tasks;
 using Tk.Extensions.Time;
 using TubeScan.Lines;
 using TubeScan.Stations;
+using TubeScan.Telemetry;
 using TubeScan.Tfl;
 using Xunit;
 
@@ -20,6 +21,8 @@ namespace TubeScan.Tests.Stations
         public void GetStationsAsync_ErrorResponseFromTfl_ExceptionRaised(int lineCount, int stationCount)
         {
             IList<Models.Line>? lines = Enumerable.Range(1, lineCount).Select(i => new Models.Line(i.ToString(), "", "")).ToList();
+
+            var telemetry = Substitute.For<ITelemetry>();
 
             var lp = Substitute.For<ILineProvider>();
             lp.GetLinesAsync().Returns(lines.ToTaskResult());
@@ -41,7 +44,7 @@ namespace TubeScan.Tests.Stations
             };
             tflc.GetAsync(Arg.Any<string>(), Arg.Any<bool>()).Returns(tflr.ToTaskResult());
 
-            var sp = new TflStationProvider(tflc, lp, GetTimeProvider(DateTime.UtcNow));
+            var sp = new TflStationProvider(telemetry, tflc, lp, GetTimeProvider(DateTime.UtcNow));
 
             var a = async () =>
             {
@@ -61,6 +64,8 @@ namespace TubeScan.Tests.Stations
         public async Task GetStationsAsync_StationsReturned(int lineCount, int stationCount)
         {
             IList<Models.Line>? lines = Enumerable.Range(1, lineCount).Select(i => new Models.Line(i.ToString(), "", "")).ToList();
+
+            var telemetry = Substitute.For<ITelemetry>();
 
             var lp = Substitute.For<ILineProvider>();
             lp.GetLinesAsync().Returns(lines.ToTaskResult());
@@ -82,7 +87,7 @@ namespace TubeScan.Tests.Stations
             };
             tflc.GetAsync(Arg.Is<string>(s => s.StartsWith("Line")), false).Returns(tflr.ToTaskResult());
 
-            var sp = new TflStationProvider(tflc, lp, GetTimeProvider(DateTime.UtcNow));
+            var sp = new TflStationProvider(telemetry, tflc, lp, GetTimeProvider(DateTime.UtcNow));
 
             var result = await sp.GetStationsAsync();
 
@@ -125,6 +130,7 @@ namespace TubeScan.Tests.Stations
                     },
                 },
             };
+            var telemetry = Substitute.For<ITelemetry>();
             var lp = Substitute.For<ILineProvider>();
             var tflc = Substitute.For<ITflClient>();
             var tflr1 = new TflResponse()
@@ -147,7 +153,7 @@ namespace TubeScan.Tests.Stations
             tflc.GetAsync(Arg.Is<string>(s => s.StartsWith($"crowding/{naptanId}/Fri")), true).Returns(tflr2.ToTaskResult());
             tflc.GetAsync(Arg.Is<string>(s => s.StartsWith($"StopPoint/{naptanId}/Arrivals")), true).Returns(tflr3.ToTaskResult());
 
-            var sp = new TflStationProvider(tflc, lp, GetTimeProvider(now));
+            var sp = new TflStationProvider(telemetry, tflc, lp, GetTimeProvider(now));
 
             var r = await sp.GetStationStatusAsync(naptanId);
 
@@ -176,6 +182,7 @@ namespace TubeScan.Tests.Stations
                                       .Select(i => new TflTimeBandStationCrowding() { PercentageOfBaseLine = 1000, TimeBand = "00:00-00:01" })
                                       .ToList(),
             };
+            var telemetry = Substitute.For<ITelemetry>();
             var lp = Substitute.For<ILineProvider>();
             var tflc = Substitute.For<ITflClient>();
             var tflr1 = new TflResponse()
@@ -198,7 +205,7 @@ namespace TubeScan.Tests.Stations
             tflc.GetAsync(Arg.Is<string>(s => s.StartsWith($"crowding/{naptanId}/Fri")), true).Returns(tflr2.ToTaskResult());
             tflc.GetAsync(Arg.Is<string>(s => s.StartsWith($"StopPoint/{naptanId}/Arrivals")), true).Returns(tflr3.ToTaskResult());
 
-            var sp = new TflStationProvider(tflc, lp, GetTimeProvider(now));
+            var sp = new TflStationProvider(telemetry, tflc, lp, GetTimeProvider(now));
 
             var r = await sp.GetStationStatusAsync(naptanId);
 
@@ -215,6 +222,7 @@ namespace TubeScan.Tests.Stations
         public void GetStationStatusAsync_ErrorResponseFromLiveTfl_ExceptionThrown(string naptanId)
         {
             var now = new DateTime(2022, 04, 01, 12, 0, 0, DateTimeKind.Utc);
+            var telemetry = Substitute.For<ITelemetry>();
             var lp = Substitute.For<ILineProvider>();
             var tflc = Substitute.For<ITflClient>();
             var tflr1 = new TflResponse()
@@ -237,7 +245,7 @@ namespace TubeScan.Tests.Stations
             tflc.GetAsync(Arg.Is<string>(s => s.StartsWith($"crowding/{naptanId}/Fri")), true).Returns(tflr2.ToTaskResult());
             tflc.GetAsync(Arg.Is<string>(s => s.StartsWith($"StopPoint/{naptanId}/Arrivals")), true).Returns(tflr3.ToTaskResult());
 
-            var sp = new TflStationProvider(tflc, lp, GetTimeProvider(now));
+            var sp = new TflStationProvider(telemetry, tflc, lp, GetTimeProvider(now));
 
             var a = async () =>
             {
@@ -258,6 +266,7 @@ namespace TubeScan.Tests.Stations
         {
             var liveCrowding = "{ dataAvailable: true, percentageOfBaseline: 1.0 }";
             var now = new DateTime(2022, 04, 01, 12, 0, 0, DateTimeKind.Utc);
+            var telemetry = Substitute.For<ITelemetry>();
             var lp = Substitute.For<ILineProvider>();
             var tflc = Substitute.For<ITflClient>();
             var tflr1 = new TflResponse()
@@ -280,7 +289,7 @@ namespace TubeScan.Tests.Stations
             tflc.GetAsync(Arg.Is<string>(s => s.StartsWith($"crowding/{naptanId}/Fri")), true).Returns(tflr2.ToTaskResult());
             tflc.GetAsync(Arg.Is<string>(s => s.StartsWith($"StopPoint/{naptanId}/Arrivals")), true).Returns(tflr3.ToTaskResult());
 
-            var sp = new TflStationProvider(tflc, lp, GetTimeProvider(now));
+            var sp = new TflStationProvider(telemetry, tflc, lp, GetTimeProvider(now));
 
             var a = async () =>
             {
@@ -301,6 +310,7 @@ namespace TubeScan.Tests.Stations
         {
             var liveCrowding = "{ dataAvailable: true, percentageOfBaseline: 1.0 }";
             var now = new DateTime(2022, 04, 01, 12, 0, 0, DateTimeKind.Utc);
+            var telemetry = Substitute.For<ITelemetry>();
             var lp = Substitute.For<ILineProvider>();
             var tflc = Substitute.For<ITflClient>();
             var tflr1 = new TflResponse()
@@ -323,7 +333,7 @@ namespace TubeScan.Tests.Stations
             tflc.GetAsync(Arg.Is<string>(s => s.StartsWith($"crowding/{naptanId}/Fri")), true).Returns(tflr2.ToTaskResult());
             tflc.GetAsync(Arg.Is<string>(s => s.StartsWith($"StopPoint/{naptanId}/Arrivals")), true).Returns(tflr3.ToTaskResult());
 
-            var sp = new TflStationProvider(tflc, lp, GetTimeProvider(now));
+            var sp = new TflStationProvider(telemetry, tflc, lp, GetTimeProvider(now));
 
             var a = async () =>
             {
