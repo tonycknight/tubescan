@@ -44,6 +44,7 @@ namespace TubeScan
                 new HttpClientHandler()
                 {
                     AllowAutoRedirect = true,
+                    MaxAutomaticRedirections = 5,
                     AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate
                 }).AddPolicyHandler(rateLimit);
 
