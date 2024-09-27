@@ -39,7 +39,7 @@ namespace TubeScan
                 .AddSingleton<Stations.StationCacheRefreshJob>();
 
             var rateLimit = Policy.RateLimitAsync<HttpResponseMessage>(500, TimeSpan.FromMinutes(1), 20);
-            
+
             var hcb = col.AddHttpClient(Tfl.ITflClient.HttpClientName).ConfigurePrimaryHttpMessageHandler(() =>
                 new HttpClientHandler()
                 {

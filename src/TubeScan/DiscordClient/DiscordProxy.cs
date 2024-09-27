@@ -35,7 +35,7 @@ namespace TubeScan.DiscordClient
             _client.Ready += client_Ready;
             _client.Disconnected += client_Disconnected;
             _client.MessageReceived += client_MessageReceived;
-            
+
         }
 
         ~DiscordProxy()
