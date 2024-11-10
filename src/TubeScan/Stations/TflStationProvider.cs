@@ -37,14 +37,14 @@ namespace TubeScan.Stations
         public async Task<StationStatus> GetStationStatusAsync(string naptanId)
         {
             var now = _time.UtcNow();
-
+            
             var statusTasks = new[]
             {
                 GetLiveStationCrowdingAsync(naptanId),
                 GetAverageStationCrowdingAsync(naptanId, now)
             };
             var statuses = await Task.WhenAll(statusTasks);
-
+            
             return new StationStatus(naptanId)
             {
                 Crowding = new StationCrowding()
@@ -73,8 +73,11 @@ namespace TubeScan.Stations
             var path = $"crowding/{naptanId}/Live";
             var resp = await _tflClient.GetAsync(path, true);
             if (!resp.IsSuccess)
-            {
-                throw new ApplicationException($"Bad response from TFL: {resp.HttpStatus} received.");
+            {               
+                $"Bad response from TFL: {resp.HttpStatus} received for {path}."
+                        .CreateTelemetryEvent(TelemetryEventKind.Error)
+                        .Send(_telemetry);                
+                return null;
             }
 
             var j = Newtonsoft.Json.Linq.JToken.Parse(resp.Body);
@@ -86,14 +89,16 @@ namespace TubeScan.Stations
             return null;
         }
 
-
         private async Task<double?> GetAverageStationCrowdingAsync(string naptanId, DateTime now)
         {
             var path = $"crowding/{naptanId}/{now.DayOfWeek.ToString()[..3]}";
             var resp = await _tflClient.GetAsync(path, true);
             if (!resp.IsSuccess)
             {
-                throw new ApplicationException($"Bad response from TFL: {resp.HttpStatus} received.");
+                $"Bad response from TFL: {resp.HttpStatus} received for {path}."
+                        .CreateTelemetryEvent(TelemetryEventKind.Error)
+                        .Send(_telemetry);
+                return null;
             }
 
             var result = resp.Body.ToTflDayOfWeekStationCrowding();
