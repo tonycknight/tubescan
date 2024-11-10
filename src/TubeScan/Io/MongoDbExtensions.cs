@@ -25,7 +25,7 @@ namespace TubeScan.Io
             var isLocalhost = config.Connection.Contains("localhost");
 
             var settings = MongoClientSettings.FromConnectionString(config.Connection);
-            
+
             settings.AllowInsecureTls = isLocalhost;
             settings.UseTls = !isLocalhost;
             settings.ConnectTimeout = TimeSpan.FromSeconds(15);

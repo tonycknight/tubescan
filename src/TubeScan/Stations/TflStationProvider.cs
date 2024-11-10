@@ -37,14 +37,14 @@ namespace TubeScan.Stations
         public async Task<StationStatus> GetStationStatusAsync(string naptanId)
         {
             var now = _time.UtcNow();
-            
+
             var statusTasks = new[]
             {
                 GetLiveStationCrowdingAsync(naptanId),
                 GetAverageStationCrowdingAsync(naptanId, now)
             };
             var statuses = await Task.WhenAll(statusTasks);
-            
+
             return new StationStatus(naptanId)
             {
                 Crowding = new StationCrowding()
@@ -73,10 +73,10 @@ namespace TubeScan.Stations
             var path = $"crowding/{naptanId}/Live";
             var resp = await _tflClient.GetAsync(path, true);
             if (!resp.IsSuccess)
-            {               
+            {
                 $"Bad response from TFL: {resp.HttpStatus} received for {path}."
                         .CreateTelemetryEvent(TelemetryEventKind.Error)
-                        .Send(_telemetry);                
+                        .Send(_telemetry);
                 return null;
             }
 
