@@ -25,7 +25,8 @@ namespace TubeScan.DiscordClient
 
             var clientConfig = new DiscordSocketConfig()
             {
-                AlwaysDownloadUsers = true
+                AlwaysDownloadUsers = true,
+                GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent,
             };
 
             _client = new DiscordSocketClient(clientConfig);
@@ -34,6 +35,7 @@ namespace TubeScan.DiscordClient
             _client.Ready += client_Ready;
             _client.Disconnected += client_Disconnected;
             _client.MessageReceived += client_MessageReceived;
+
         }
 
         ~DiscordProxy()

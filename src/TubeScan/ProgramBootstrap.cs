@@ -40,8 +40,13 @@ namespace TubeScan
 
             var rateLimit = Policy.RateLimitAsync<HttpResponseMessage>(500, TimeSpan.FromMinutes(1), 20);
 
-            var hcb = col.AddHttpClient(Tfl.ITflClient.HttpClientName)
-                         .AddPolicyHandler(rateLimit);
+            var hcb = col.AddHttpClient(Tfl.ITflClient.HttpClientName).ConfigurePrimaryHttpMessageHandler(() =>
+                new HttpClientHandler()
+                {
+                    AllowAutoRedirect = true,
+                    MaxAutomaticRedirections = 5,
+                    AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate
+                }).AddPolicyHandler(rateLimit);
 
             return col.BuildServiceProvider();
         }

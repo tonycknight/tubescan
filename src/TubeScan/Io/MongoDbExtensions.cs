@@ -22,9 +22,12 @@ namespace TubeScan.Io
         [ExcludeFromCodeCoverage]
         public static IMongoDatabase GetDb(this Config.MongoConfiguration config)
         {
+            var isLocalhost = config.Connection.Contains("localhost");
+
             var settings = MongoClientSettings.FromConnectionString(config.Connection);
-            settings.AllowInsecureTls = false;
-            settings.UseTls = true;
+
+            settings.AllowInsecureTls = isLocalhost;
+            settings.UseTls = !isLocalhost;
             settings.ConnectTimeout = TimeSpan.FromSeconds(15);
             settings.ServerSelectionTimeout = settings.ConnectTimeout;
 
