@@ -23,6 +23,7 @@ jobs:
       - name: Restore packages
         run: |
           dotnet tool restore
+          dotnet restore
           
       - name: Vulnerable package scan
         uses: tonycknight/pkgchk-action@v1.0.18
