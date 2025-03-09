@@ -19,11 +19,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Restore packages
-        run: |
-          dotnet tool restore
           
       - name: Vulnerable package scan
-        uses: tonycknight/pkgchk-action@v1.0.16
+        uses: tonycknight/pkgchk-action@v1.0.19
+        
+        
       
