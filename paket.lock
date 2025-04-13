@@ -126,7 +126,7 @@ NUGET
       ZstdSharp.Port (>= 0.7.3)
     MongoDB.Libmongocrypt (1.12)
     Newtonsoft.Json (13.0.3)
-    NSubstitute (5.1)
+    NSubstitute (5.3)
       Castle.Core (>= 5.1.1)
     Polly (8.4.1)
       Polly.Core (>= 8.4.1)
