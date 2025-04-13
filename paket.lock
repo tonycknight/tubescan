@@ -422,7 +422,7 @@ NUGET
       Microsoft.NETCore.Targets (>= 1.1)
       System.Runtime (>= 4.3)
     System.ValueTuple (4.5)
-    Tk.Extensions (0.1.113)
+    Tk.Extensions (0.1.135)
       Newtonsoft.Json (>= 13.0.3)
     xunit (2.9.3)
       xunit.analyzers (>= 1.18)
