@@ -15,5 +15,16 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <NoWarn>1701;1702;CS8619;CS8604;CS8620;CS8634;CS8600;CS8625;CS4014;CS8603;CS8618;CS8602</NoWarn>
   </PropertyGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
+  <ItemGroup>
+    <PackageReference Include="Crayon" Version="2.0.69" />
+    <PackageReference Include="Discord.Net" Version="3.19.1" />
+    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="10.0.5" />
+    <PackageReference Include="MongoDB.Driver" Version="3.7.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="System.Runtime.Caching" Version="10.0.5" />
+    <PackageReference Include="Tk.Extensions" Version="0.1.260" />
+  </ItemGroup>  
 </Project>
