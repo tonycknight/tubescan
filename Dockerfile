@@ -18,7 +18,6 @@ RUN dotnet restore "src/TubeScan/TubeScan.csproj"
 COPY . .
 WORKDIR "/src/src/TubeScan"
 RUN dotnet tool restore
-RUN dotnet paket restore
 RUN dotnet build "TubeScan.csproj" -c Release -o /app/build /p:AssemblyInformationalVersion=${BuildVersion} /p:AssemblyFileVersion=${BuildVersion}
 
 FROM build AS publish

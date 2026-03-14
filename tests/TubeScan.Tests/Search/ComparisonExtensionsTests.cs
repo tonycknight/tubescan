@@ -2,6 +2,7 @@
 using System.Linq;
 using FluentAssertions;
 using FsCheck;
+using FsCheck.Fluent;
 using FsCheck.Xunit;
 using TubeScan.Search;
 using Xunit;

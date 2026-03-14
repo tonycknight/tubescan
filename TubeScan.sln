@@ -1,14 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.32126.317
+# Visual Studio Version 18
+VisualStudioVersion = 18.4.11605.240 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TubeScan", "src\TubeScan\TubeScan.csproj", "{B54E952B-FB46-4B30-9854-5662D4C340E8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{C74E29E9-157A-4142-B251-B736E99F49F0}"
 	ProjectSection(SolutionItems) = preProject
 		.github\CODEOWNERS = .github\CODEOWNERS
-		paket.dependencies = paket.dependencies
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8444DF6B-15DF-4C3D-B66A-ACE9C04F1DBA}"
@@ -39,6 +38,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{B56076
 		.github\workflows\clean-builds.yaml = .github\workflows\clean-builds.yaml
 		.github\CODEOWNERS = .github\CODEOWNERS
 		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
+		.github\dependabot.yml = .github\dependabot.yml
 		.github\workflows\sca.yml = .github\workflows\sca.yml
 	EndProjectSection
 EndProject
