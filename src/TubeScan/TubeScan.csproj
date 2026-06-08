@@ -17,7 +17,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Crayon" Version="2.0.69" />
-    <PackageReference Include="Discord.Net" Version="3.19.1" />
+    <PackageReference Include="Discord.Net" Version="3.20.1" />
     <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="5.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.8" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.8" />
