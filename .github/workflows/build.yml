@@ -55,49 +55,23 @@ jobs:
           dotnet restore
       
       - name: Unit tests
-        run: dotnet test -c Debug --logger "trx;LogFileName=test_results.trx" /p:CollectCoverage=true /p:CoverletOutput=./TestResults/coverage.info /p:CoverletOutputFormat=cobertura
+        run: dotnet test -c Debug --ignore-exit-code 8 -- --coverage --coverage-output-format cobertura --report-trx
 
       - name: Consolidate coverage
-        run: dotnet reportgenerator -reports:'./tests/**/coverage.info' -reporttypes:'html' -targetdir:'./publish/codecoverage'
-
-      - name: Archive Test results
-        uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: tests.results
-          path: |
-            ./tests/**/TestResults/*
-            
-      - name: Archive Code coverage
-        uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: codecoverage
-          path: ./publish/codecoverage/*.*
+        run: dotnet reportgenerator -reports:./TestResults/*.cobertura.xml -targetdir:"./publish/codecoveragesummary" -reporttypes:"MarkdownSummaryGithub"
           
       - name: Unit test results
         uses: dorny/test-reporter@v3
         if: always()
         with:
           name: unit test results
-          path: ${{ github.workspace }}/tests/TubeScan.Tests/TestResults/test_results.trx
+          path: ${{ github.workspace }}/TestResults/*.trx
           reporter: dotnet-trx
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Code coverage results
-        uses: 5monkeys/cobertura-action@master
-        if: always()
-        with:
-          path: ${{ github.workspace }}/tests/TubeScan.Tests/TestResults/coverage.info
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          minimum_coverage: 70
-          fail_below_threshold: false
-          show_line: true
-          show_branch: true
-          show_missing: true
-          show_class_names: true
-          link_missing_lines: true
-          report_name: code coverage results
+      - name: Post Code coverage summary
+        run: |
+          cat ./publish/codecoveragesummary/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
 
   stryker:
     name: Mutation testing
@@ -115,7 +89,7 @@ jobs:
           dotnet restore
               
       - name: Run Mutation testing
-        run: dotnet dotnet-stryker
+        run: dotnet dotnet-stryker -t mtp
 
       - name: Archive Stryker results
         uses: actions/upload-artifact@v7
